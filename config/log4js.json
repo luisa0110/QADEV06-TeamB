@@ -1,0 +1,22 @@
+{
+  "appenders": [
+    {
+      "type": "clustered",
+      "appenders": [
+        {
+          "type": "file",
+          "filename": "logs/roomManager.log",
+          "category":"roomManager"
+        },
+        {
+          "type": "logLevelFilter",
+          "level": "ALL",
+          "appender": {
+            "type": "file",
+            "filename": "logs/roomManager.log"
+          }
+        }
+      ]
+    }
+  ]
+}

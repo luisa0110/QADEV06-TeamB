@@ -1,0 +1,7 @@
+{
+	"amount" : {"quantity": 10},
+	"newResource" : {
+		"resourceId" : "{idResource}",
+		"quantity" : 1
+	}
+}

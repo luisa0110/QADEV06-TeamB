@@ -1,0 +1,58 @@
+
+{
+	"adminJson":{
+		"username":"Administrator",
+		"password":"Clave123",
+		"hostname":"qadev04exc04.forest1.local"
+	},
+	"roomJson":
+		{
+  			"enabled": false,
+			"customDisplayName": "SmokeTest"
+		},
+	"authorization":"Authorization",
+	"jwt":"jwt ",
+	"postFilter":"?type=exchange",
+	"roomDisplayJson":
+			{
+				"displayName" : "Floor1Room99"
+			},
+	"service":
+			{
+				"type":"exchange"
+			},
+	"serviceId":
+			{
+				"_id":"kasd"
+			},
+	"PropertiesRoom":
+	{
+		"emailAddress":"emailAddress",
+		"displayName":"displayName",
+		"serviceId":"serviceId",
+		"_id":"_id",
+		"enabled":"enabled",
+		"locationId":"locationId",
+		"customDisplayName":"customDisplayName"
+	},
+	"PropertiesService":
+	{
+		"type":"type",
+		"name":"name",
+		"version":"version",
+		"_id":"_id",
+		"impersonate":"impersonate",
+		"zero":"0.0.1",
+		"exchange":"exchange",
+		"support":"support",
+		"Exchange":"Exchange Server 2010"
+	},
+	"locationId":
+	{
+		"locationId":""
+	},
+	"RoomDisablejson":
+	{
+		"enabled":"false"
+	}
+}

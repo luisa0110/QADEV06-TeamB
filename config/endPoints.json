@@ -1,0 +1,20 @@
+{
+	"meetings":"/meetings",
+	"rooms":"/rooms",
+	"resources" :"/resources",
+	"login" : "/login",
+	"resourceId":"/resources/{:id}",
+	"room":"/rooms",
+	"outOfOrder":"/out-of-orders",
+	"outOfOrderId":"/out-of-orders/{:outOfOrderId}",
+	"getOutOfOrder":"/services/{:serviceId}/rooms/{:roomId}/out-of-orders",
+	"getOutOfOrderbyService":"/services/{:serviceId}/rooms/{:roomId}/out-of-orders/{:outOfOrderId}",
+	"outOfOrderEndPoint":"/out-of-orders/{:outOfOrderId}",
+	"apk" : "/apk",
+	"publicKey" : "/public-key",
+	"services":"/services",
+	"locations":"/locations",
+	"locationById" : "/locations/{:locationId}",
+	"attend" : "/services/{:serviceId}/attendees?filter=A",
+	"serviceTypes":"/service-types"
+}

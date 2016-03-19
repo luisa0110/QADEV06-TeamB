@@ -1,2 +1,1 @@
-# QADEV06-TeamB
-Reuse an existent framework
+# QADEV04-RM-API

@@ -1,0 +1,19 @@
+{
+	"outOfOrderJson" : {
+				"roomId":"id",
+				"from": "from",
+				"to": "to",
+				"title":"title"
+	},
+	"titleSize": 6,
+
+	"RoomId":{"roomId" : "room._id"},
+	"serviceId":{"serviceId":"serviceId"},
+	"deleteOutOfOrder":{"delete":"NotFoundError"},
+	"bdtJson" : {
+				"roomId":"id",
+  				"from": "2015-10-30T23:00:00.000Z",
+  				"to": "2015-10-31T17:00:00.000Z",
+				"title":"room out of order"
+	}
+}

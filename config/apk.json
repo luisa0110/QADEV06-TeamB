@@ -1,0 +1,6 @@
+{
+	"apkError" : {
+		"code" : "ResourceNotFound",
+		"message" : "/apk does not exist"
+	}
+}
