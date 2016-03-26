@@ -8,6 +8,7 @@ var expect          = require('chai').expect;
 //services
 var tokenAPI       = requireServices.tokenAPI;
 var roomManagerAPI = requireServices.roomManagerAPI;
+
 var util           = requireServices.util;
 var mongodb        = requireServices.mongodb;
 

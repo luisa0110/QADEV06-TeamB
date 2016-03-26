@@ -27,7 +27,7 @@
 	},
 	"tokenHeader" : "Authorization",
 	"tokenPrefix" : "jwt ",
-	
+
 	"nameId":{
 		"serviceId" : "{:serviceId}",
 		"roomId" : "{:roomId}",
