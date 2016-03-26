@@ -2,6 +2,7 @@
 GLOBAL.initialDirectory = __dirname;
 
 var config = require(GLOBAL.initialDirectory+'/config/config.json');
+
 var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
 var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
 var authorization=config.tokenHeader;

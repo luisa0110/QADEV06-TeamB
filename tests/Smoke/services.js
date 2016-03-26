@@ -20,6 +20,7 @@ var url = config.url;
 var serviceEndPoint = url+endPoints.services;
 var serviceEndPointPost=serviceEndPoint + serviceConfig.postFilter;;
 var serviceTypes = url+endPoints.serviceTypes;
+var service?Types = url+endPoints.service?Types;//TODO   
 // global variables
 var token = null; 
 var idService = null;
@@ -48,7 +49,7 @@ describe('Smoke test for RoomManager',function()
 		token = null;
 		done();
 	});
-	it('GET /servicesType SmokeTest, Verify the status 200',function(done)
+	it ('GET /servicesType SmokeTest, Verify the status 200',function(done)
 	{
 		roomManagerAPI
 			.get(serviceTypes,function(err,res)

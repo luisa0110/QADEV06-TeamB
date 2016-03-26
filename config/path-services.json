@@ -1,0 +1,8 @@
+{
+  "tokenAPI" : "/lib/tokenAPI",
+  "resourcesAPI" : "/lib/resourcesAPI",
+  "meetingsAPI" : "/lib/meetingsAPI",
+  "mongodb" : "/lib/mongodb",
+  "util" : "/util/util",
+  "roomManagerAPI" : "/lib/roomManagerAPI"
+}
