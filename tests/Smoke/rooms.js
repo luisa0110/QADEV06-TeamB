@@ -1,13 +1,16 @@
 var init = require('../../init');
 var expect = require('chai').expect;
-var tokenAPI=require(GLOBAL.initialDirectory+'/lib/tokenAPI');
-var roomManagerAPI=require(GLOBAL.initialDirectory+'/lib/RoomManagerAPI');
-var mongodb=require(GLOBAL.initialDirectory+'/lib/mongodb');
+var requireServices =  require(GLOBAL.initialDirectory+'/lib/req-serv.js');
 var config =require(GLOBAL.initialDirectory+'/config/config.json');
-var endPoints=require(GLOBAL.initialDirectory+'/config/endPoints');
-var resourceConfig = require(GLOBAL.initialDirectory+'/config/resource.json');
 var roomJson = require(GLOBAL.initialDirectory+'/config/room.json');
-var util=require(GLOBAL.initialDirectory+'/util/util');
+//services
+var tokenAPI = requireServices.tokenAPI;
+var roomManagerAPI = requireServices.roomManagerAPI;
+var mongodb = requireServices.mongodb;
+var endPoints	=	requireServices.endPoints;
+var resourceConfig = requireServices.resourceConfig;
+var util = requireServices.util;
+//variables
 var token=null;
 var room=null;
 var resource=null;
@@ -32,9 +35,11 @@ describe('Smoke Testing for Room routes', function() {
 			.getToken(function(err,res){
 				token = res.body.token;
 				endPoint=config.url+endPoints.rooms;
-				json=roomJson.roomQueries.customDisplayName;
+				json=roomJson.roomQueries.displayName;
+				//console.log(json);
 				mongodb.findDocument('rooms',json,function(doc){
 					room=doc;
+					console.log(room._id);
 					done();
 				});						
 			});
@@ -42,7 +47,7 @@ describe('Smoke Testing for Room routes', function() {
 
 	after('Post conditions : restore the properties of the rooms changed ',function (done) {
 		endPoint=config.url+endPoints.rooms+'/'+room._id;
-			json.customDisplayName="Floor1Room1";
+			json.customDisplayName="Floor1Room2";
 			roomManagerAPI.
 				put(token,endPoint,json,function(err,res){
 					done();
@@ -66,6 +71,8 @@ describe('Smoke Testing for Room routes', function() {
  */
 	it('Get /rooms/{roomId}, Verify the status 200 ',function(done){	
 		endPoint=endPoint+'/'+room._id;
+		console.log('hola');
+		console.log(room._id);
 		roomManagerAPI.
 			get(endPoint,function(err,res){
 				expect(res.status).to.equal(config.httpStatus.Ok);
@@ -86,7 +93,7 @@ describe('Smoke Testing for Room routes', function() {
 			});	
 	});
 });
-
+//de aca abajo bn la mayoria
 describe('Smoke Testing for Room Resources routes ', function() {
 	this.timeout(config.timeOut);
 
@@ -135,6 +142,7 @@ describe('Smoke Testing for Room Resources routes ', function() {
 	it('GET /rooms/{roomId}/resources,Verify the status 200',function(done){	
 			roomManagerAPI.get(endPoint,function(err,res){
 				expect(res.status).to.equal(config.httpStatus.Ok);
+				console.log(room._id);
 				done();
 			});			  				  			 						
 	});	

@@ -3,17 +3,17 @@
     "resources" : {
         "roomsAsoc":
             {
-           "resourceId": "1", "quantity": 1 
+           "resourceId": "ObjectId(\"56f6af753de924900cb85274\")", "quantity": 1 
             }
     },          
     "roomQueries" : {
-        "customDisplayName":
+        "displayName":
             {
-           "customDisplayName" : "Floor1Room1" 
+           "displayName":"Floor1Room1" 
             },
         "roomPut":
             {
-                 "emailAddress" : "Floor1Room1@forest1.local",
+                 "emailAddress" : "Floor1Room1@sinergy.eng",
                   "displayName" : "Floor1Room1",
                   "resources" : [],
                   "enabled" : true,
