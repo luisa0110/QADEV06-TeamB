@@ -4,28 +4,29 @@
 var init = require('../../init');
 var config = require(GLOBAL.initialDirectory+'/config/config.json');
 var expect = require('chai').expect;
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var resourceConfig = require(GLOBAL.initialDirectory+config.path.resourceConfig);
-var roomResource = require(GLOBAL.initialDirectory+config.path.roomResource);
-var util = require(GLOBAL.initialDirectory+config.path.util);
+var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
+
+
+var tokenAPI = requireServices.tokenAPI;
+var roomManagerAPI = requireServices.roomManagerAPI;
+var endPoints = requireServices.endPoints;
+var resourceConfig = requireServices.resourceConfig;
+var roomResource = requireServices.roomResource;
+var util = requireServices.util;
 //End Points
-var url = config.url;
+var url = requireServices.url;
+
 var servicesEndPoint = url + endPoints.services;
 var roomsEndPoint = url + endPoints.rooms;
-var resourceEndPoint = url + endPoints.resources;
-var resources = endPoints.resources;
-var rooms = endPoints.rooms;
+var RESOURCE_END_POINT = url + endPoints.resources;
+var RESOURCES = endPoints.resources;
+var ROOMS = endPoints.rooms;
+
 // global variables
-var token = null; 
-var idService=null;
-var idRoom = null;
-var idResourceCreate = null;
-var resourceJSon = null;
-var associateResource = null;
-var idLastResource = null;
-var endPointFinal = null;
+var token,idService,idRoom,idResourceCreate,
+    resourceJSon,associateResource,
+    idLastResource,endPointFinal;
+
 
 describe('Smoke test for RoomManager',function()
 {
@@ -60,7 +61,7 @@ describe('Smoke test for RoomManager',function()
 				resourceJSon = util.getRandomResourcesJson(resourceConfig.resourceNameSize);
 				//create a new resource
 				roomManagerAPI
-					.post(token, resourceEndPoint, resourceJSon, function(err,resp){
+					.post(token, RESOURCE_END_POINT, resourceJSon, function(err,resp){
 						idResourceCreate = resp.body._id;
 						//json for associate resource to room
 						associateResource = {
@@ -74,8 +75,10 @@ describe('Smoke test for RoomManager',function()
 							.post(token,associateEndPoint,associateResource, function(err, res){										
 								var size = res.body.resources.length;										
 								idLastResource = res.body.resources[size-1]._id;
+								
+								//console.log(res.body.resources[size-1]);
 								//endPoint for execute actions over a room									
-								endPointFinal = servicesEndPoint + '/' + idService + rooms + '/' + idRoom + resources + '/' + idLastResource;
+								endPointFinal = servicesEndPoint + '/' + idService + ROOMS + '/' + idRoom + RESOURCES + '/' + idLastResource;
 
 								done();
 							});						
@@ -87,7 +90,7 @@ describe('Smoke test for RoomManager',function()
 	afterEach(function (done) {
 		//delete resource create
 		roomManagerAPI
-			.del(token,resourceEndPoint+'/'+idResourceCreate,function(err,res){
+			.del(token,RESOURCE_END_POINT+'/'+idResourceCreate,function(err,res){
 				done();
 			});
 	});

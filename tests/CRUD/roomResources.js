@@ -1,35 +1,35 @@
 //CRUD of roomResources
-//by Miguel Angel Terceros Caballero
 
-var init = require('../../init');
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
-var expect = require('chai').expect;
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var resourceConfig = require(GLOBAL.initialDirectory+config.path.resourceConfig);
-var roomResource = require(GLOBAL.initialDirectory+config.path.roomResource);
-var util = require(GLOBAL.initialDirectory+config.path.util);
-var mongodb = require(GLOBAL.initialDirectory+config.path.mongodb);
+var init            = require('../../init');
+var config          = require(GLOBAL.initialDirectory+'/config/config.json');
+var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
+var expect          = require('chai').expect;
+
+//services
+var tokenAPI       = requireServices.tokenAPI;
+var roomManagerAPI = requireServices.roomManagerAPI;
+var util           = requireServices.util;
+var mongodb        = requireServices.mongodb;
+
+//config
+var endPoints      = requireServices.endPoints;
+var resourceConfig = requireServices.resourceConfig;
+var roomResource   = requireServices.roomResource;
+
 //End Points
-var url = config.url;
-var servicesEndPoint = url + endPoints.services;
-var roomsEndPoint = url + endPoints.rooms;
-var resourceEndPoint = url + endPoints.resources;
+var url              = requireServices.url;
+var servicesEndPoint = requireServices.servicesEndPoint;
+var roomsEndPoint    = requireServices.roomsEndPoint;
+var resourceEndPoint = requireServices.resourceEndPoint;
+
 var resources = endPoints.resources;
-var rooms = endPoints.rooms;
+var rooms     = endPoints.rooms;
+
 // global variables
-var room = null;
-var token = null; 
-var idService=null;
-var idRoom = null;
-var idResourceCreate = null;
-var resourceJSon = null;
-var associateResource = null;
-var idLastResource = null;
-var endPointFinal = null;
-var roomJSON = null;
-var size = null;
+var room,token,idService,idRoom,
+    idResourceCreate,resourceJSon,
+    associateResource,idLastResource,
+    endPointFinal,roomJSON,size;
 
 describe('CRUD test for RoomResources',function()
 {
@@ -94,7 +94,7 @@ describe('CRUD test for RoomResources',function()
 	afterEach(function (done) {
 		//delete resource create
 		roomManagerAPI
-			.del(token,resourceEndPoint+'/'+idResourceCreate,function(err,res){
+			.del(token, +'/'+idResourceCreate,function(err,res){
 				done();
 			});	
 	});

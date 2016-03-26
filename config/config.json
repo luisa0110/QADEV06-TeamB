@@ -1,11 +1,11 @@
 {
 
-	"url" : "https://172.20.208.194:4040",
-	"urlmongodb" : "mongodb://172.20.208.194:27017/roommanager", 
-	"timeOut" : 4000,
+	"url" : "https://172.20.208.79:4040",
+	"urlmongodb" : "mongodb://172.20.208.79:27017/roommanager", 
+	"timeOut" : 8000,
 	"userAccountJson" : {
-		"username": "test",
-	  	"password": "Client123",
+		"username": "JavierGutierrez",
+	  	"password": "Control123",
 	  	"authentication": "local"
 	},	
 	"httpStatus" :{
@@ -13,12 +13,8 @@
 	},
 	"path":{
 		"tokenAPI" : "/lib/tokenAPI",
-		"resourcesAPI" : "/lib/resourcesAPI",
 		"endPoints" : "/config/endPoints.json",
 		"resourceConfig" : "/config/resource.json",
-		"meetingsAPI" : "/lib/meetingsAPI",
-		"mongodb" : "/lib/mongodb",
-		"util" : "/util/util",
 		"roomManagerAPI" : "/lib/roomManagerAPI",
 		"outOfOrder" : "/config/outOfOrder.json",
 		"apk" : "/config/apk.json",
@@ -28,10 +24,10 @@
 		"serviceConfig":"/config/service.json",
 		"room":"/config/room.json",
 		"meetingConfig" : "/config/meeting.json"
-
 	},
 	"tokenHeader" : "Authorization",
 	"tokenPrefix" : "jwt ",
+	
 	"nameId":{
 		"serviceId" : "{:serviceId}",
 		"roomId" : "{:roomId}",
@@ -40,9 +36,9 @@
 	"tokenBasicPrefix" : "Basic ",
 	"userBasicAccountJson" : "QXJpZWwuUm9qYXM6Q2xpZW50MTIz",
 	"exchangeAccount":{
-		"username":"Administrator",
-		"password":"Clave123",
-		"hostname":"qadev04exc04.forest1.local"
+		"username":"JavierGutierrez",
+		"password":"Control123",
+		"hostname":"sinergy.eng"
 	}
 
 }

@@ -16,5 +16,6 @@
 	"locations":"/locations",
 	"locationById" : "/locations/{:locationId}",
 	"attend" : "/services/{:serviceId}/attendees?filter=A",
-	"serviceTypes":"/service-types"
+	"serviceTypes":"/service-types",
+	"service?Types":"?type={:serviceType}"
 }
