@@ -152,6 +152,8 @@ describe('CRUD test for RoomResources',function()
 					});				
 			});
 	});
+  
+    
 
 	it('CRUD-DEL /services/{:serviceId}/rooms/{:roomId}/resources/{:roomResourceId} api deleted the resources specified of a room', function (done) {
 		//delete the last resource

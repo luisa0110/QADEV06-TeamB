@@ -5,10 +5,7 @@ var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
 var expect = require('chai').expect;
 
 
-//var endPoints = requireServices.endPoints;
 var roomManagerAPI = requireServices.roomManagerAPI;
-
-//url
 var publicKeyEndPoint = requireServices.publicKeyEndPoint;
 
 describe('Smoke TC PGP public-key', function () {

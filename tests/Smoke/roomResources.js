@@ -40,7 +40,7 @@ describe('Smoke test for RoomManager',function()
 				roomManagerAPI
 					.getwithToken(token, servicesEndPoint, function(err, resp){
 						idService = resp.body[0]._id;
-
+                      
 						done();			
 					});							
 			});
@@ -56,6 +56,7 @@ describe('Smoke test for RoomManager',function()
 		//getting roomID
 		roomManagerAPI
 			.get(roomsEndPoint, function(err, res){
+
 				idRoom = res.body[0]._id;//id room
 				resourceJSon = util.getRandomResourcesJson(resourceConfig.resourceNameSize);
 				//create a new resource
@@ -68,7 +69,9 @@ describe('Smoke test for RoomManager',function()
 							"quantity" : 1
 						};
 						//endpoint for associate an resource to room
-						var associateEndPoint = url + '/rooms/'+idRoom+'/resources';
+						  var associateEndPoint = roomsEndPoint + '/' + idRoom + '/resources';
+                                                      
+
 						//associate resource to room
 						roomManagerAPI
 							.post(token,associateEndPoint,associateResource, function(err, res){										
@@ -93,6 +96,7 @@ describe('Smoke test for RoomManager',function()
 				done();
 			});
 	});
+
 
 	it('GET /services/{:serviceId}/rooms/{:roomId}/resources/{:roomResourceId} returns 200',function (done){	
 		//get the resource of a room specified
@@ -125,4 +129,48 @@ describe('Smoke test for RoomManager',function()
 				done();
 			});				
 	});
+});
+
+
+
+describe.only('Smoke test for /rooms/{:roomId}/resources ',function(){
+ var enp
+
+   this.timeout(config.timeOut);
+	before(function (done) {
+		process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+		//getting the token
+		tokenAPI
+			.getToken(function(err,res){
+				token = res.body.token;	
+				//getting serviceID
+				roomManagerAPI
+					.getwithToken(token, roomsEndPoint, function(err, resp){
+						idRoom = resp.body[0]._id;
+						done();			
+					});							
+			});
+	});
+
+	after('After to create tests',function(done)
+	{
+		token = null;
+		done();
+	});
+   
+    it('GET',function(done) {
+    	roomManagerAPI
+
+			.get(roomsEndPoint+ '/' + idRoom + RESOURCES, function(err, re){							
+				expect(re.status).to.equal(config.httpStatus.Ok);
+				console.log(re.body);
+				done();
+			});	
+       
+    });
+    
+
+
+
+  
 });
