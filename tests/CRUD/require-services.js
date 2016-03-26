@@ -1,9 +1,5 @@
 
-
-
 var pathServices = require(GLOBAL.initialDirectory+'/config/path-services.json');
-
-
 var config       = require(GLOBAL.initialDirectory+'/config/config.json');
 
 var tokenAPI       = require(GLOBAL.initialDirectory+pathServices.tokenAPI);
@@ -18,27 +14,21 @@ var roomResource   = require(GLOBAL.initialDirectory+config.path.roomResource);
 ///
 var url            = config.url;
 
+var servicesEndPoint = url + endPoints.services;
+var roomsEndPoint    = url + endPoints.rooms;
+var resourceEndPoint = url + endPoints.resources;
+var resources = endPoints.resources;
+var rooms     = endPoints.rooms;
+
 
 exports.tokenAPI = tokenAPI;
 exports.roomManagerAPI = roomManagerAPI;
 exports.util = util;
 exports.mongodb = mongodb;
 
-
 exports.endPoints = endPoints;
 exports.resourceConfig = resourceConfig;
 exports.roomResource = roomResource;
-
-
-
-var servicesEndPoint = url + endPoints.services;
-var roomsEndPoint    = url + endPoints.rooms;
-var resourceEndPoint = url + endPoints.resources;
-
-
-var resources = endPoints.resources;
-var rooms     = endPoints.rooms;
-
 
 exports.url              = url;
 exports.servicesEndPoint = servicesEndPoint;

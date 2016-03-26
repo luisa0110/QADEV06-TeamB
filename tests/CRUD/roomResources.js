@@ -1,13 +1,12 @@
 //CRUD of roomResources
 
-var init         = require('../../init');
-var config       = require(GLOBAL.initialDirectory+'/config/config.json');
-var expect       = require('chai').expect;
+var init            = require('../../init');
+var config          = require(GLOBAL.initialDirectory+'/config/config.json');
 var requireServices = require(GLOBAL.initialDirectory+'/tests/CRUD/require-services.js');
+var expect          = require('chai').expect;
+
 
 //services
-//var tokenAPI       = require(GLOBAL.initialDirectory+pathServices.tokenAPI);
-
 var tokenAPI       = requireServices.tokenAPI;
 var roomManagerAPI = requireServices.roomManagerAPI;
 var util           = requireServices.util;
@@ -23,7 +22,6 @@ var url              = requireServices.url;
 var servicesEndPoint = requireServices.servicesEndPoint;
 var roomsEndPoint    = requireServices.roomsEndPoint;
 var resourceEndPoint = requireServices.resourceEndPoint;
-
 
 var resources = endPoints.resources;
 var rooms     = endPoints.rooms;

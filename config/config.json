@@ -13,7 +13,6 @@
 	},
 	"path":{
 		"tokenAPI" : "/lib/tokenAPI",
-		
 		"endPoints" : "/config/endPoints.json",
 		"resourceConfig" : "/config/resource.json",
 		"roomManagerAPI" : "/lib/roomManagerAPI",
@@ -28,6 +27,7 @@
 	},
 	"tokenHeader" : "Authorization",
 	"tokenPrefix" : "jwt ",
+	
 	"nameId":{
 		"serviceId" : "{:serviceId}",
 		"roomId" : "{:roomId}",

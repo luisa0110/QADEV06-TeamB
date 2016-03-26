@@ -4,20 +4,18 @@
 var init = require('../../init');
 var config = require(GLOBAL.initialDirectory+'/config/config.json');
 var expect = require('chai').expect;
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
+var requireServices = require(GLOBAL.initialDirectory+'/tests/CRUD/require-services.js');
 
 
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var resourceConfig = require(GLOBAL.initialDirectory+config.path.resourceConfig);
-
-
-
-
-var roomResource = require(GLOBAL.initialDirectory+config.path.roomResource);
-var util = require(GLOBAL.initialDirectory+config.path.util);
+var tokenAPI = requireServices.tokenAPI;
+var roomManagerAPI = requireServices.roomManagerAPI;
+var endPoints = requireServices.endPoints;
+var resourceConfig = requireServices.resourceConfig;
+var roomResource = requireServices.roomResource;
+var util = requireServices.util;
 //End Points
-var url = config.url;
+var url = requireServices.url;
+
 var servicesEndPoint = url + endPoints.services;
 var roomsEndPoint = url + endPoints.rooms;
 var RESOURCE_END_POINT = url + endPoints.resources;
