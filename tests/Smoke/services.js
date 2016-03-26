@@ -1,26 +1,30 @@
 //Services
 //Author : Joaquin Gonzales Mosquera
-var init = require('../../init.js');
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
+var init          = require('../../init.js');
+var config        = require(GLOBAL.initialDirectory+'/config/config.json');
 var serviceConfig = require(GLOBAL.initialDirectory+config.path.serviceConfig);
-var expect = require('chai').expect;
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var mongodb = require(GLOBAL.initialDirectory+config.path.mongodb);
+var expect        = require('chai').expect;
+
+var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
+
+var tokenAPI = requireServices.tokenAPI;
+var roomManagerAPI = requireServices.roomManagerAPI;
+var mongodb = requireServices.mongodb;
 //endpoints
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var util = require(GLOBAL.initialDirectory+config.path.util);
+var endPoints = requireServices.endPoints;
+
+var util = requireServices.util;
 //user account
 var userJSon = config.userAccountJson;
 var adminJson = config.exchangeAccount;
 var roomJson = serviceConfig.roomJson;
 var mongojs = serviceConfig.roomDisplayJson;
 //End Points
-var url = config.url;
-var serviceEndPoint = url+endPoints.services;
-var serviceEndPointPost=serviceEndPoint + serviceConfig.postFilter;;
-var serviceTypes = url+endPoints.serviceTypes;
-var service?Types = url+endPoints.service?Types;//TODO   
+var url = requireServices.url;
+var serviceEndPoint = requireServices.servicesEndPoint;
+var serviceEndPointPost = serviceEndPoint + serviceConfig.postFilter;;
+var serviceTypes = requireServices.servicesTypes;
+//var service?Types = url+endPoints.service?Types;//TODO   
 // global variables
 var token = null; 
 var idService = null;
@@ -29,7 +33,6 @@ var roomEndPoint = serviceEndPoint;
 var rooms = endPoints.rooms;
 //status for response 200
 var ok = config.httpStatus.Ok;
-
 
 
 describe('Smoke test for RoomManager',function()

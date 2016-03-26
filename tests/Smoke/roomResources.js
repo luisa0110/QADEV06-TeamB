@@ -15,7 +15,6 @@ var roomResource = requireServices.roomResource;
 var util = requireServices.util;
 //End Points
 var url = requireServices.url;
-
 var servicesEndPoint = url + endPoints.services;
 var roomsEndPoint = url + endPoints.rooms;
 var RESOURCE_END_POINT = url + endPoints.resources;

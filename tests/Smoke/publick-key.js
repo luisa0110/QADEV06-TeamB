@@ -1,12 +1,11 @@
-//Smoke TC pgp public-key
-//Miguel Angel Terceros Caballero
 
-var expect = require('chai').expect;
-//import libraries
 var init = require('../../init');
 var config = require(GLOBAL.initialDirectory+'/config/config.json');
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
+var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
+var expect = require('chai').expect;
+
+var endPoints = requireServices.endPoints;
+var roomManagerAPI = requireServices.roomManagerAPI;
 
 //url
 var publicKeyEndPoint = config.url + endPoints.publicKey;
