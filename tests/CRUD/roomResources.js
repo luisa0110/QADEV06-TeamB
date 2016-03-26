@@ -2,9 +2,8 @@
 
 var init            = require('../../init');
 var config          = require(GLOBAL.initialDirectory+'/config/config.json');
-var requireServices = require(GLOBAL.initialDirectory+'/tests/CRUD/require-services.js');
+var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
 var expect          = require('chai').expect;
-
 
 //services
 var tokenAPI       = requireServices.tokenAPI;
@@ -25,20 +24,8 @@ var resourceEndPoint = requireServices.resourceEndPoint;
 
 var resources = endPoints.resources;
 var rooms     = endPoints.rooms;
+
 // global variables
-/*
-var room = null;
-var token = null; 
-var idService=null;
-var idRoom = null;
-var idResourceCreate = null;
-var resourceJSon = null;
-var associateResource = null;
-var idLastResource = null;
-var endPointFinal = null;
-var roomJSON = null;
-var size = null;
-*/
 var room,token,idService,idRoom,
     idResourceCreate,resourceJSon,
     associateResource,idLastResource,

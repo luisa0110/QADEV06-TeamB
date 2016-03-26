@@ -4,7 +4,7 @@
 var init = require('../../init');
 var config = require(GLOBAL.initialDirectory+'/config/config.json');
 var expect = require('chai').expect;
-var requireServices = require(GLOBAL.initialDirectory+'/tests/CRUD/require-services.js');
+var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
 
 
 var tokenAPI = requireServices.tokenAPI;
@@ -23,14 +23,10 @@ var RESOURCES = endPoints.resources;
 var ROOMS = endPoints.rooms;
 
 // global variables
-var token = null; 
-var idService=null;
-var idRoom = null;
-var idResourceCreate = null;
-var resourceJSon = null;
-var associateResource = null;
-var idLastResource = null;
-var endPointFinal = null;
+var token,idService,idRoom,idResourceCreate,
+    resourceJSon,associateResource,
+    idLastResource,endPointFinal;
+
 
 describe('Smoke test for RoomManager',function()
 {
