@@ -5,12 +5,14 @@ var expect = require('chai').expect;
 //import libraries
 var init = require('../../init');
 var config = require(GLOBAL.initialDirectory+'/config/config.json');
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var publicKey = require(GLOBAL.initialDirectory+config.path.publicKey);
+var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
+
+var endPoints = requireServices.endPoints;
+var roomManagerAPI = requireServices.roomManagerAPI;
+var publicKey = requireServices.publicKey;
 
 //url
-var publicKeyEndPoint = config.url + endPoints.publicKey;
+var publicKeyEndPoint = requireServices.publicKeyEndPoint; 
 //declare variables for structure of the key
 var publicKeyBegin = publicKey.publicKeyStructure.publicKeyBegin; 
 var publicKeyVersion = publicKey.publicKeyStructure.publicKeyVersion;
