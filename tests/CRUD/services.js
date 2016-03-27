@@ -8,6 +8,7 @@ var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
 
 //Configuration
 var serviceConfig = require(GLOBAL.initialDirectory+config.path.serviceConfig);
+
 var tokenAPI = requireServices.tokenAPI;
 var roomManagerAPI =  requireServices.roomManagerAPI;
 var mongodb = requireServices.mongodb;

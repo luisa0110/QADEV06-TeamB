@@ -4,7 +4,6 @@ var init          = require('../../init.js');
 var config        = require(GLOBAL.initialDirectory+'/config/config.json');
 var serviceConfig = require(GLOBAL.initialDirectory+config.path.serviceConfig);
 var expect        = require('chai').expect;
-
 var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
 
 var tokenAPI = requireServices.tokenAPI;
