@@ -94,7 +94,7 @@ describe('Smoke test for RoomManager',function()
 			});
 	});
 
-	it('GET /services/{:serviceId}/rooms/{:roomId}/resources/{:roomResourceId} returns 200',function (done){	
+	it.only('GET /services/{:serviceId}/rooms/{:roomId}/resources/{:roomResourceId} returns 200',function (done){	
 		//get the resource of a room specified
 		roomManagerAPI
 			.get(endPointFinal, function(err, re){							

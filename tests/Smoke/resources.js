@@ -136,8 +136,10 @@ describe('Resources Smoke tests', function () {
 				});
 		});
 		it('Delete /resources', function (done){
+		//var JsonId = {_id: '['+resourceId+']'};
 			roomManagerAPI
-				.del(token, resourceEndPint, resourceId, function(){
+				.delwithJson(token, resourceEndPoint, resourceId, function(err, res){
+					console.log(res.body+ 'BODY');
 					expect(res.status).to.equal(config.httpStatus.Ok);
 					done();
 				});

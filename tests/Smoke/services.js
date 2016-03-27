@@ -22,7 +22,7 @@ var mongojs = serviceConfig.roomDisplayJson;
 //End Points
 var url = requireServices.url;
 var serviceEndPoint = requireServices.servicesEndPoint;
-var serviceEndPointPost = serviceEndPoint + serviceConfig.postFilter;;
+var serviceEndPointFilter = serviceEndPoint + serviceConfig.postFilter;;
 var serviceTypes = requireServices.servicesTypes;
 //var service?Types = url+endPoints.service?Types;//TODO   
 // global variables
@@ -34,9 +34,7 @@ var rooms = endPoints.rooms;
 //status for response 200
 var ok = config.httpStatus.Ok;
 
-
-describe('Smoke test for RoomManager',function()
-{
+describe('Smoke test for RoomManager ROOT', function(){
 	this.timeout(config.timeOut);
 	before(function (done) {
 		process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -52,109 +50,158 @@ describe('Smoke test for RoomManager',function()
 		token = null;
 		done();
 	});
-	it ('GET /servicesType SmokeTest, Verify the status 200',function(done)
-	{
-		roomManagerAPI
-			.get(serviceTypes,function(err,res)
-			{
-				expect(res.status).to.equal(ok);
-				done();
-			});
-	});
-
-	it('Get /services SmokeTest, Verify the status 200',function(done)
-	{
-		roomManagerAPI
-			.getwithToken(token, serviceEndPoint, function(err,res)
-			{
-				expect(res.status).to.equal(ok);
-				done();
-			});				
-	});
 	
-	describe('GET /services/serviceID',function()
-	{		
-		beforeEach(function(done)
+	describe('GET mothods', function(){
+		before(function(done){
+		roomManagerAPI
+				.getwithToken(token,serviceEndPoint,function(err,res)
+				{
+					idService=res.body;
+					if(idService.length>0)
+					{
+						roomManagerAPI
+							.post(token,serviceEndPointFilter,adminJson,function(err,resp){
+							console.log(resp.body);
+							expect(resp.status).to.equal(ok);
+							done();
+							});
+					}
+					else done();
+			});
+		});
+		after(function(done){
+			roomManagerAPI
+					.getwithToken(token,serviceEndPoint,function(err,res)
+					{
+						idService=res.body;
+						if(idService.length>0)
+						{
+							roomManagerAPI
+								.del(token,serviceEndPoint+'/'+idService[0]._id,function(err,res)
+								{
+									done();
+								});
+						}
+						 else {done();} 
+				});
+		});
+		it ('GET /servicesType SmokeTest, Verify the status 200',function(done)
 		{
 			roomManagerAPI
-				.getwithToken(token, serviceEndPoint, function(err,resp){
-				idService = resp.body[0]._id;
-				roomEndPoint=roomEndPoint + '/' + idService + '/'+rooms;
-				mongodb
-					.findDocument('rooms',mongojs,function(res)
+				.get(serviceTypes,function(err,res)
+				{
+					expect(res.status).to.equal(ok);
+					done();
+				});
+		});
+
+		it('Get /services SmokeTest, Verify the status 200',function(done)
+		{
+			roomManagerAPI
+				.getwithToken(token, serviceEndPoint, function(err,res)
+				{
+					expect(res.status).to.equal(ok);
+					done();
+				});				
+		});
+		
+		it('GET ?type=exchange SmokeTest, Verify the status 200', function(done){
+			roomManagerAPI
+				.getwithToken(token, serviceEndPointFilter, function(err, res){
+					expect(res.status).to.equal(ok);
+					done();
+				});
+		});
+		
+		describe('GET /services/serviceID',function()
+		{		
+			beforeEach(function(done)
+			{
+				roomManagerAPI
+					.getwithToken(token, serviceEndPoint, function(err,resp){
+					idService = resp.body[0]._id;
+					roomEndPoint=roomEndPoint + '/' + idService + '/'+rooms;
+					mongodb
+						.findDocument('rooms',mongojs,function(res)
+						{
+							idRoom = res._id;
+							done();
+						});
+				});
+			});
+			afterEach(function(done)
+			{
+				roomEndPoint = serviceEndPoint;
+				done();
+			});
+			it('GET /services/ServiceID Smoke test, Verify the status 200 (GET method) by serviceID',function(done)
+			{
+				roomManagerAPI
+					.get(serviceEndPoint + '/' + idService, function(err,res)
 					{
-						idRoom = res._id;
+						expect(res.status).to.equal(ok);
+						done();
+					});
+			});
+			it('GET /services/serviceID/rooms smoke test, verify the status 200 after to require rooms',function(done)
+			{
+				roomManagerAPI
+					.get(roomEndPoint,function(err,res)
+					{
+						expect(res.status).to.equal(ok);
+						done();
+					});
+			});
+			it('GET /services/serviceID/rooms/roomID Smoke test, verify that the server returns the romm with IdRoom',function(done)
+			{
+				roomManagerAPI
+					.get(roomEndPoint+'/'+idRoom,function(err,res)
+					{
+						expect(res.status).to.equal(ok);
+						done();
+					});	
+			});
+			it('PUT /services/serviceID/rooms/roomID Smoke test, verify that it is possible modify a room with method PUT',function(done)
+			{
+				roomManagerAPI
+					.put(token,roomEndPoint+'/'+idRoom,roomJson,function(err,res)
+					{
+						expect(res.status).to.equal(ok);
 						done();
 					});
 			});
 		});
-		afterEach(function(done)
-		{
-			roomEndPoint = serviceEndPoint;
-			done();
-		});
-		it('GET /services/ServiceID Smoke test, Verify the status 200 (GET method) by serviceID',function(done)
-		{
-			roomManagerAPI
-				.get(serviceEndPoint + '/' + idService, function(err,res)
-				{
-					expect(res.status).to.equal(ok);
-					done();
-				});
-		});
-		it('GET /services/serviceID/rooms smoke test, verify the status 200 after to require rooms',function(done)
-		{
-			roomManagerAPI
-				.get(roomEndPoint,function(err,res)
-				{
-					expect(res.status).to.equal(ok);
-					done();
-				});
-		});
-		it('GET /services/serviceID/rooms/roomID Smoke test, verify that the server returns the romm with IdRoom',function(done)
-		{
-			roomManagerAPI
-				.get(roomEndPoint+'/'+idRoom,function(err,res)
-				{
-					expect(res.status).to.equal(ok);
-					done();
-				});	
-		});
-		it('PUT /services/serviceID/rooms/roomID Smoke test, verify that it is possible modify a room with method PUT',function(done)
-		{
-			roomManagerAPI
-				.put(token,roomEndPoint+'/'+idRoom,roomJson,function(err,res)
-				{
-					expect(res.status).to.equal(ok);
-					done();
-				});
-		});
 	});
-	xdescribe('Method of Delete Service',function()
+	
+
+	describe('Method of Delete Service',function()
 	{
 		before(function(done)
 		{
 			roomManagerAPI
 				.getwithToken(token,serviceEndPoint,function(err,res)
 				{
-					idService=res.body;
-					if(idService.length==0)
+					if(res.body[0]._id == "")
 					{
 						
 						roomManagerAPI
-							.post(token,serviceEndPointPost,adminJson,function(err,res)
+							.post(token,serviceEndPointFilter,adminJson,function(err,res)
 							{
-								idService=res.body;
-								done();
+								idService=res.body[0]._id;
+								//done();
 							});
 					}
-					else done();
+					else {
+						console.log('habia service y es '+res.body[0]._id);
+						idService=res.body[0]._id;
+					}					
+					done();
 			});
 		});
 		after(function(done)
 		{
 			roomManagerAPI
-				.post(token,serviceEndPointPost,adminJson,function(err,resp)
+				.post(token,serviceEndPointFilter,adminJson,function(err,resp)
 				{
 					done();
 				});
@@ -163,14 +210,14 @@ describe('Smoke test for RoomManager',function()
 		{
 			
 			roomManagerAPI
-				.del(token, serviceEndPoint+'/'+idService[0]._id, function(err,resp)
+				.del(token, serviceEndPoint+'/'+idService, function(err,resp)
 				{
 					expect(resp.status).to.equal(ok);
 					done();
 				});
 		});
 	});
-	xdescribe('Method Post Service',function()
+	describe('Method Post Service',function()
 	{
 		before(function(done)
 		{
@@ -199,16 +246,13 @@ describe('Smoke test for RoomManager',function()
 		});
 		it('POST /services Smoke Test, Verify the status 200 after to add a new service',function(done)
 		{
-			
-			serviceEndPointPost=serviceEndPoint+serviceConfig.postFilter;
-			console.log(serviceEndPointPost,'adminJson',adminJson);
 			roomManagerAPI
-				.post(token,serviceEndPointPost,adminJson,function(err,resp)
+				.post(token,serviceEndPointFilter,adminJson,function(err,resp)
 				{
-					console.log(resp);
+					console.log(resp.body);
 					expect(resp.status).to.equal(ok);
 					done();
 				});
 		});
-	});		
+	});	
 });
