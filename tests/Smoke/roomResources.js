@@ -133,7 +133,7 @@ describe('Smoke test for RoomManager',function()
 
 
 
-describe.only('Smoke test for /rooms/{:roomId}/resources ',function(){
+describe('Smoke test for /rooms/{:roomId}/resources ',function(){
  var enp
 
    this.timeout(config.timeOut);
