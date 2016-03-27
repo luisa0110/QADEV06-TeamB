@@ -2,26 +2,33 @@
 
 var init            = require('../../init');
 var config          = require(GLOBAL.initialDirectory+'/config/config.json');
-var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
+
 var expect          = require('chai').expect;
 
 //services
-var tokenAPI       = requireServices.tokenAPI;
-var roomManagerAPI = requireServices.roomManagerAPI;
+var tokenAPI       = requireServices.tokenAPI();
+var roomManagerAPI = requireServices.roomManagerAPI();
 
-var util           = requireServices.util;
-var mongodb        = requireServices.mongodb;
+var util           = requireServices.util();
+var mongodb        = requireServices.mongodb();
 
 //config
-var endPoints      = requireServices.endPoints;
-var resourceConfig = requireServices.resourceConfig;
-var roomResource   = requireServices.roomResource;
+var endPoints      = requireServices.endPoint();
+
+
+var resourceConfig = requireServices.resourceConfig();
+var roomResource   = requireServices.roomResource();
 
 //End Points
-var url              = requireServices.url;
-var servicesEndPoint = requireServices.servicesEndPoint;
-var roomsEndPoint    = requireServices.roomsEndPoint;
-var resourceEndPoint = requireServices.resourceEndPoint;
+var url              = requireServices.url();
+var servicesEndPoint = requireServices.servicesEndPoint();
+var roomsEndPoint    = requireServices.roomsEndPoint();
+var resourceEndPoint = requireServices.resourceEndPoint();
+
+
+console.log(resourceEndPoint);
 
 var resources = endPoints.resources;
 var rooms     = endPoints.rooms;

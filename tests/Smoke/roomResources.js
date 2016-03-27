@@ -4,15 +4,18 @@
 var init = require('../../init');
 var config = require(GLOBAL.initialDirectory+'/config/config.json');
 var expect = require('chai').expect;
+
 var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
 
 var requireServices = new RequireServices();
+
 var tokenAPI        = requireServices.tokenAPI();
 var roomManagerAPI  = requireServices.roomManagerAPI();
 var endPoints       = requireServices.endPoint();
 var resourceConfig  = requireServices.resourceConfig();
 var roomResource    = requireServices.roomResource();
 var util            = requireServices.util();
+
 //End endPoints
 var url = requireServices.url();
 var servicesEndPoint = url + endPoints.services;
