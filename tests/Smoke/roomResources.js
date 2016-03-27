@@ -4,17 +4,17 @@
 var init = require('../../init');
 var config = require(GLOBAL.initialDirectory+'/config/config.json');
 var expect = require('chai').expect;
-var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
 
-
-var tokenAPI = requireServices.tokenAPI;
-var roomManagerAPI = requireServices.roomManagerAPI;
-var endPoints = requireServices.endPoints;
-var resourceConfig = requireServices.resourceConfig;
-var roomResource = requireServices.roomResource;
-var util = requireServices.util;
-//End Points
-var url = requireServices.url;
+var requireServices = new RequireServices();
+var tokenAPI        = requireServices.tokenAPI();
+var roomManagerAPI  = requireServices.roomManagerAPI();
+var endPoints       = requireServices.endPoint();
+var resourceConfig  = requireServices.resourceConfig();
+var roomResource    = requireServices.roomResource();
+var util            = requireServices.util();
+//End endPoints
+var url = requireServices.url();
 var servicesEndPoint = url + endPoints.services;
 var roomsEndPoint = url + endPoints.rooms;
 var RESOURCE_END_POINT = url + endPoints.resources;
@@ -163,7 +163,7 @@ describe('Smoke test for /rooms/{:roomId}/resources ',function(){
 
 			.get(roomsEndPoint+ '/' + idRoom + RESOURCES, function(err, re){							
 				expect(re.status).to.equal(config.httpStatus.Ok);
-				console.log(re.body);
+				//console.log(re.body);
 				done();
 			});	
        

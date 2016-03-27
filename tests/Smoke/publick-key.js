@@ -1,14 +1,16 @@
 
 var init = require('../../init');
 var config = require(GLOBAL.initialDirectory+'/config/config.json');
-var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
 var expect = require('chai').expect;
 
-
-var roomManagerAPI = requireServices.roomManagerAPI;
-var publicKeyEndPoint = requireServices.publicKeyEndPoint;
+var requireServices = new RequireServices();
+var roomManagerAPI =  requireServices.roomManagerAPI();
+var publicKeyEndPoint = requireServices.publicKeyEndPoint(); 
 
 describe('Smoke TC PGP public-key', function () {
+
+    this.timeout(config.timeOut);
 
 	before(function (done) {
 		this.timeout(config.timeOut);
