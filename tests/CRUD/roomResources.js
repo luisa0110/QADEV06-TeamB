@@ -4,7 +4,6 @@ var init            = require('../../init');
 var config          = require(GLOBAL.initialDirectory+'/config/config.json');
 var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
 var requireServices = new RequireServices();
-
 var expect          = require('chai').expect;
 
 //services
@@ -16,8 +15,6 @@ var mongodb        = requireServices.mongodb();
 
 //config
 var endPoints      = requireServices.endPoint();
-
-
 var resourceConfig = requireServices.resourceConfig();
 var roomResource   = requireServices.roomResource();
 
