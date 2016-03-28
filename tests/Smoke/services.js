@@ -4,27 +4,30 @@ var init          = require('../../init.js');
 var config        = require(GLOBAL.initialDirectory+'/config/config.json');
 var serviceConfig = require(GLOBAL.initialDirectory+config.path.serviceConfig);
 var expect        = require('chai').expect;
-var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
 
-var tokenAPI = requireServices.tokenAPI;
-var roomManagerAPI = requireServices.roomManagerAPI;
-var mongodb = requireServices.mongodb;
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
+
+var tokenAPI = requireServices.tokenAPI();
+var roomManagerAPI = requireServices.roomManagerAPI();
+var mongodb = requireServices.mongodb();
 //endpoints
-var endPoints = requireServices.endPoints;
+var endPoints = requireServices.endPoint();
 
-var util = requireServices.util;
+var util = requireServices.util();
 //user account
 var userJSon = config.userAccountJson;
 var adminJson = config.exchangeAccount;
 var roomJson = serviceConfig.roomJson;
 var mongojs = serviceConfig.roomDisplayJson;
 //End Points
-var url = requireServices.url;
-var serviceEndPoint = requireServices.servicesEndPoint;
+var url = requireServices.url();
+var serviceEndPoint = requireServices.servicesEndPoint();
 var serviceEndPointFilter = serviceEndPoint + serviceConfig.postFilter;;
-var serviceTypes = requireServices.servicesTypes;
+var serviceTypes = requireServices.serviceTypes();
 //var service?Types = url+endPoints.service?Types;//TODO   
 // global variables
+var existService = false;
 var token = null; 
 var idService = null;
 var idRoom = null;
@@ -50,7 +53,7 @@ describe('Smoke test for RoomManager ROOT', function(){
 		done();
 	});
 	
-	describe('GET mothods', function(){
+	describe('GET methods', function(){
 		before(function(done){
 		roomManagerAPI
 				.getwithToken(token,serviceEndPoint,function(err,res)
@@ -70,18 +73,18 @@ describe('Smoke test for RoomManager ROOT', function(){
 		});
 		after(function(done){
 			roomManagerAPI
-					.getwithToken(token,serviceEndPoint,function(err,res)
+				.getwithToken(token,serviceEndPoint,function(err,res)
+				{
+					idService=res.body;
+					if(idService.length>0)
 					{
-						idService=res.body;
-						if(idService.length>0)
-						{
-							roomManagerAPI
-								.del(token,serviceEndPoint+'/'+idService[0]._id,function(err,res)
-								{
-									done();
-								});
-						}
-						 else {done();} 
+						roomManagerAPI
+							.del(token,serviceEndPoint+'/'+idService[0]._id,function(err,res)
+							{
+								done();
+							});
+					}
+					 else done(); 
 				});
 		});
 		it ('GET /servicesType SmokeTest, Verify the status 200',function(done)
@@ -180,36 +183,36 @@ describe('Smoke test for RoomManager ROOT', function(){
 			roomManagerAPI
 				.getwithToken(token,serviceEndPoint,function(err,res)
 				{
-					if(res.body[0]._id == "")
-					{
-						
+					if(res.body.length === 0){
 						roomManagerAPI
-							.post(token,serviceEndPointFilter,adminJson,function(err,res)
+							.post(token,serviceEndPointFilter, adminJson, function(err,res)
 							{
-								idService=res.body[0]._id;
-								//done();
+								idService = res.body._id;
+								done();
 							});
 					}
 					else {
-						console.log('habia service y es '+res.body[0]._id);
-						idService=res.body[0]._id;
+						existService = true;
+						idService = res.body[0]._id;
+						done();
 					}					
-					done();
+					
 			});
 		});
 		after(function(done)
 		{
-			roomManagerAPI
-				.post(token,serviceEndPointFilter,adminJson,function(err,resp)
-				{
-					done();
-				});
+			if(existService){
+				roomManagerAPI
+					.post(token,serviceEndPointFilter,adminJson,function(err,resp)
+					{
+						done();
+					});
+			}
 		});
-		it('DELETE /services Smoke Test, Verify the status 200 after to delete a service',function(done)
+		it.only('DELETE /services Smoke Test, Verify the status 200 after to delete a service',function(done)
 		{
-			
 			roomManagerAPI
-				.del(token, serviceEndPoint+'/'+idService, function(err,resp)
+				.del(token, serviceEndPoint + '/' + idService, function(err, resp)
 				{
 					expect(resp.status).to.equal(ok);
 					done();
@@ -223,14 +226,15 @@ describe('Smoke test for RoomManager ROOT', function(){
 			roomManagerAPI
 				.getwithToken(token,serviceEndPoint,function(err,res)
 				{
-					idService=res.body;
-					if(idService.length>0)
+					if(res.body.length > 0)
 					{
+						idService = res.body[0]._id;
 						roomManagerAPI
-							.del(token,serviceEndPoint+'/'+idService[0]._id,function(err,res)
+							.del(token,serviceEndPoint+'/' + idService,function(err,res)
 							{
 								done();
 							});
+						existService = true;
 					}
 					else done();
 			});
@@ -242,13 +246,21 @@ describe('Smoke test for RoomManager ROOT', function(){
 				{
 					done();
 				});
+				if(existService){
+					roomManagerAPI
+						.post(token,serviceEndPointFilter,adminJson,function(err,resp)
+						{
+							done();
+						});
+				}
+				
 		});
 		it('POST /services Smoke Test, Verify the status 200 after to add a new service',function(done)
 		{
 			roomManagerAPI
 				.post(token,serviceEndPointFilter,adminJson,function(err,resp)
 				{
-					console.log(resp.body);
+					idService = resp.body._id;
 					expect(resp.status).to.equal(ok);
 					done();
 				});
