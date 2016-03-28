@@ -29,6 +29,10 @@ var resourceEndPoint = requireServices.resourceEndPoint();
 var resources = endPoints.resources;
 var rooms     = endPoints.rooms;
 
+var arrayProperties = ['_id','emailAddress','displayName','serviceId',
+						'resources','customDisplayName','enabled','locationId'];
+
+
 // global variables
 var room,token,idService,idRoom,
     idResourceCreate,resourceJSon,
@@ -121,7 +125,7 @@ describe('CRUD test for RoomResources',function(){
 			});		
 	});
 
-	it.only('CRUD-PUT /services/{:serviceId}/rooms/{:roomId}/resources/{:roomResourceId} api update the resources specified of a room', function (done) {
+	it('CRUD-PUT /services/{:serviceId}/rooms/{:roomId}/resources/{:roomResourceId} api update the resources specified of a room', function (done) {
 		//variable for the modify an resource
 		var quantityJON = roomResource.amount;
 		//put the last resource
@@ -133,9 +137,7 @@ describe('CRUD test for RoomResources',function(){
 						resourcesMongoId = (res.resources[size-1]._id).toString();
 						resourcesAPIpId = (resp.body.resources[size-1]._id).toString();
 						expect(resourcesMongoId).to.equal(resourcesAPIpId);
-
                         expect(res.resources[size-1].quantity).to.equal(resp.body.resources[size-1].quantity);
-
 						expect(res.emailAddress).to.equal(resp.body.emailAddress);
 						expect(res.displayName).to.equal(resp.body.displayName);
 						expect(res.customDisplayName).to.equal(resp.body.customDisplayName);
@@ -145,21 +147,9 @@ describe('CRUD test for RoomResources',function(){
 						expect(resp.body.resources[size-1]).to.have.property("_id");										
 						expect(resp.body.resources[size-1]).to.have.property("quantity");
 
-						var arrayProperties = ['_id','emailAddress','displayName','serviceId',
-						'resources','customDisplayName','enabled','locationId'];
-						arrayProperties.forEach( function (el) {
-							expect(res).to.have.property(el);
-							console.log(el);
+						arrayProperties.forEach( function (prop) {
+							expect(res).to.have.property(prop);
 						});
-/*
-						expect(res).to.have.property("_id");
-						expect(res).to.have.property("emailAddress");
-						expect(res).to.have.property("displayName");
-						expect(res).to.have.property("serviceId");						
-						expect(res).to.have.property("resources");
-						expect(res).to.have.property("customDisplayName");
-						expect(res).to.have.property("enabled");
-						expect(res).to.have.property("locationId");*/
 
 						done();
 					});				
@@ -176,27 +166,14 @@ describe('CRUD test for RoomResources',function(){
 					.findDocument('rooms', roomJSON, function(res){								
 						expect(re.status).to.equal(config.httpStatus.Ok);												
 						expect(re.body.resources[size-1]).to.not.exist;
-						
 						expect(res.emailAddress).to.equal(re.body.emailAddress);
-						
 						expect(res.displayName).to.equal(re.body.displayName);
-						
-						
-						
 						expect(res.customDisplayName).to.equal(re.body.customDisplayName);
-						
 						expect(res.enabled).to.equal(re.body.enabled);
-						
 						expect(res.locationId).to.equal(re.body.locationId);
-						expect(res).to.have.property("_id");
-						expect(res).to.have.property("emailAddress");
-						expect(res).to.have.property("displayName");
-						expect(res).to.have.property("serviceId");
-						expect(res).to.have.property("resources");
-						expect(res).to.have.property("customDisplayName");
-						expect(res).to.have.property("enabled");
-						expect(res).to.have.property("locationId");
-						   						
+						arrayProperties.forEach( function (prop) {
+							expect(res).to.have.property(prop);
+						});
 						done();
 					});	
 			});
@@ -206,7 +183,7 @@ describe('CRUD test for RoomResources',function(){
        roomManagerAPI
          .get(enPointRes, function(err,res){ 
            expect(res.status).to.equal(config.httpStatus.Ok);
-           expect(res.body[0]).to.have.property('_id');
+           expect(res.body[0]).to.have.property('_id');     
            expect(idLastResource).to.equal(idResourceCreate);
            done();
          });
@@ -221,16 +198,11 @@ describe('CRUD test for RoomResources',function(){
           .post(token,enPointRes,jsonResource, function(err,res) {
           	    size = res.body.resources.length;
                 idLastResource = res.body.resources[size-1]._id;                
+                arrayProperties.forEach( function (prop) {
+					expect(res.body).to.have.property(prop);
+			    });
                 expect(res.status).to.equal(config.httpStatus.Ok);
-                expect(res.body).to.have.property("emailAddress");
-				expect(res.body).to.have.property("displayName");
-				expect(res.body).to.have.property("serviceId");
-				expect(res.body).to.have.property("resources");
-				expect(res.body).to.have.property("enabled");
-				expect(res.body).to.have.property("locationId");
-				expect(idLastResource).to.equal(idResourceCreate);
-				console.log(res.body);
-
+                expect(idLastResource).to.equal(idResourceCreate);
                 done();
           });
       

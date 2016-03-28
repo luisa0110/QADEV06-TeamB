@@ -9,7 +9,7 @@ var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').Requir
 
 var requireServices = new RequireServices();
 
-var config = requireServices.config();
+var config          = requireServices.config();
 var tokenAPI        = requireServices.tokenAPI();
 var roomManagerAPI  = requireServices.roomManagerAPI();
 var endPoints       = requireServices.endPoint();
@@ -132,7 +132,6 @@ describe('Smoke test for RoomManager',function()
 			});				
 	});
   
-
     it('Get /services/{:serviceId}/rooms/{:roomId}/resources',function(done){
        roomManagerAPI
          .get(enPointRes, function(err,res){
@@ -153,9 +152,6 @@ describe('Smoke test for RoomManager',function()
           });
       
     });
-    
-
-
 });
 
 
