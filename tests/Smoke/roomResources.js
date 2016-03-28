@@ -2,13 +2,14 @@
 //smoke test from Miguel Angel Terceros Caballero
 
 var init = require('../../init');
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
+
 var expect = require('chai').expect;
 
 var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
 
 var requireServices = new RequireServices();
 
+var config = requireServices.config();
 var tokenAPI        = requireServices.tokenAPI();
 var roomManagerAPI  = requireServices.roomManagerAPI();
 var endPoints       = requireServices.endPoint();
@@ -27,7 +28,7 @@ var ROOMS = endPoints.rooms;
 // global variables
 var token,idService,idRoom,idResourceCreate,
     resourceJSon,associateResource,
-    idLastResource,endPointFinal;
+    idLastResource,endPointFinal,enPointRes;
 
 
 describe('Smoke test for RoomManager',function()
@@ -80,11 +81,9 @@ describe('Smoke test for RoomManager',function()
 							.post(token,associateEndPoint,associateResource, function(err, res){										
 								var size = res.body.resources.length;										
 								idLastResource = res.body.resources[size-1]._id;
-								
-								//console.log(res.body.resources[size-1]);
 								//endPoint for execute actions over a room									
 								endPointFinal = servicesEndPoint + '/' + idService + ROOMS + '/' + idRoom + RESOURCES + '/' + idLastResource;
-
+                                enPointRes = servicesEndPoint + '/' + idService + ROOMS + '/' + idRoom + RESOURCES;
 								done();
 							});						
 					});
@@ -95,7 +94,7 @@ describe('Smoke test for RoomManager',function()
 	afterEach(function (done) {
 		//delete resource create
 		roomManagerAPI
-			.del(token,RESOURCE_END_POINT+'/'+idResourceCreate,function(err,res){
+			.del(token,RESOURCE_END_POINT + '/' + idResourceCreate,function(err,res){
 				done();
 			});
 	});
@@ -132,48 +131,33 @@ describe('Smoke test for RoomManager',function()
 				done();
 			});				
 	});
-});
+  
 
+    it('Get /services/{:serviceId}/rooms/{:roomId}/resources',function(done){
+       roomManagerAPI
+         .get(enPointRes, function(err,res){
+           expect(res.status).to.equal(config.httpStatus.Ok);
+           done();
+         });
+    });
 
+    it('Post /services/{:serviceId}/rooms/{:roomId}/resources', function(done){
+     
+       var jsonResource = roomResource.newResource;
+       jsonResource.resourceId = idLastResource;
 
-describe('Smoke test for /rooms/{:roomId}/resources ',function(){
- var enp
-
-   this.timeout(config.timeOut);
-	before(function (done) {
-		process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-		//getting the token
-		tokenAPI
-			.getToken(function(err,res){
-				token = res.body.token;	
-				//getting serviceID
-				roomManagerAPI
-					.getwithToken(token, roomsEndPoint, function(err, resp){
-						idRoom = resp.body[0]._id;
-						done();			
-					});							
-			});
-	});
-
-	after('After to create tests',function(done)
-	{
-		token = null;
-		done();
-	});
-   
-    it('GET',function(done) {
-    	roomManagerAPI
-
-			.get(roomsEndPoint+ '/' + idRoom + RESOURCES, function(err, re){							
-				expect(re.status).to.equal(config.httpStatus.Ok);
-				//console.log(re.body);
-				done();
-			});	
-       
+       roomManagerAPI
+          .post(token,enPointRes,jsonResource, function(err,res) {
+                expect(res.status).to.equal(config.httpStatus.Ok);
+                done();
+          });
+      
     });
     
 
 
-
-  
 });
+
+
+
+
