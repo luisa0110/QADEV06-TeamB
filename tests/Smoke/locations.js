@@ -1,14 +1,20 @@
 /**
  * Smoke test of location by: Jose Antonio Cardozo
  */
-var init = require('../../init');
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
-var expect = require('chai').expect;
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var util = require(GLOBAL.initialDirectory+config.path.util);
-var locationConfig = require(GLOBAL.initialDirectory+config.path.locationConfig);
+var init 	= require('../../init');
+var expect 	= require('chai').expect;
+
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+
+var requireServices = new RequireServices();
+
+var config 			= requireServices.config();
+
+var tokenAPI 		= requireServices.tokenAPI();
+var endPoints 		= requireServices.endPoint();
+var roomManagerAPI 	= requireServices.roomManagerAPI();
+var util 			= requireServices.util();
+var locationConfig 	= requireServices.locationConfig();
 
 //global variables
 var token = null;

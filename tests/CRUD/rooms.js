@@ -1,25 +1,30 @@
 //CRUD TC rooms
 //Brayan Gabriel Rosas Fernandez
 var init = require('../../init');
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
-var resourceConfig = require(GLOBAL.initialDirectory+config.path.resourceConfig);
 var expect = require('chai').expect;
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var util = require(GLOBAL.initialDirectory+config.path.util);
-var roomJson= require(GLOBAL.initialDirectory+config.path.room);
-var mongodb=require(GLOBAL.initialDirectory+config.path.mongodb);
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
+
+var config = requireServices.config();
+var resourceConfig = requireServices.resourceConfig();
+var tokenAPI = requireServices.tokenAPI();
+var roomManagerAPI = requireServices.roomManagerAPI();
+var endPoints = requireServices.endPoint();
+var util = requireServices.util();
+var roomJson = require(GLOBAL.initialDirectory+config.path.room);
+var mongodb = requireServices.mongodb();
+
 //EndPoints
 var url = config.url;
+
 // global variables
 var token = null; 
-var jsonByDefault=roomJson.roomQueries.roomPut;
-var room=null;
-var rooms=null;
-var endPoint=config.url+endPoints.rooms;
-var endPoint2=config.url+endPoints.resources;
-var jsonRoom=null;
+var jsonByDefault = roomJson.roomQueries.roomPut;
+var room = null;
+var rooms = null;
+var endPoint = config.url+endPoints.rooms;
+var endPoint2 = config.url+endPoints.resources;
+var jsonRoom = null;
 
 describe('Resource CRUD Suite get by id and put', function () {
 	this.timeout(config.timeOut);
@@ -113,24 +118,30 @@ describe('Resource CRUD Suite get by id and put', function () {
 	});
 });
 
+
+
+
 describe('Rooms associated to Resources', function(done) {
 
 	before('Before Set',function (done) {
 		tokenAPI
 			.getToken(function(err,res){
 				token = res.body.token;
-				jsonRoom=roomJson.roomQueries.customDisplayName;
+				jsonRoom = roomJson.roomQueries.displayName;
+				console.log(jsonRoom);
+				console.log('...................');
 				mongodb.findDocument('rooms',jsonRoom,function(doc){
-					room=doc;
-						jsonRoom=util.getRandomResourcesJson(resourceConfig.resourceNameSize);
+					room = doc;
+						jsonRoom = util.getRandomResourcesJson(resourceConfig.resourceNameSize);
 						roomManagerAPI.post(token,endPoint2,jsonRoom,function(err,resourceRes){
-							resource=resourceRes;
-						 	endPoint=endPoint+'/'+room._id+'/resources';	
-						 	jsonRoom=roomJson.resources.roomsAsoc;	
-							jsonRoom.resourceId=resource.body._id;
+							resource = resourceRes;
+						 	endPoint = endPoint+'/'+room._id+'/resources';	
+						 	jsonRoom = roomJson.resources.roomsAsoc;	
+							jsonRoom.resourceId = resource.body._id;
 								roomManagerAPI.post
 									(token,endPoint,jsonRoom,function(err,resAsoc){
-									resourceAsoc=resAsoc;
+									resourceAsoc = resAsoc;
+								console.log(doc);	
 									done();
 								});									
 						});	
@@ -146,22 +157,30 @@ describe('Rooms associated to Resources', function(done) {
 			});	
 	});
 
-	it('GET /rooms/{roomId}/resources ,CRUD Get a resources associated to room',function(done){	
+
+
+
+	it.only('GET /rooms/{roomId}/resources ,CRUD Get a resources associated to room',function(done){	
 		roomManagerAPI.get(endPoint,function(err,res){
-			mongoJson={ "displayName" : "Floor1Room1"}
-			mongodb.findDocument('rooms',mongoJson,function(doc){	
+			mongoJson = { "displayName" : "Floor1Room1"}
+			mongodb.findDocument('rooms',mongoJson,function(doc){
 				expect(err).to.be.null;
 				expect(res.status).to.equal(config.httpStatus.Ok);
 				expect(res.body[0]).to.have.property("_id")
 				.and.be.equal(doc.resources[0]._id.toString());
+				/*
 				expect(res.body[0]).to.have.property("resourceId")
 				.and.be.equal(doc.resources[0].resourceId.toString());
 				expect(res.body[0]).to.have.property("quantity")
-				.and.be.equal(doc.resources[0].quantity);
+				.and.be.equal(doc.resources[0].quantity);*/
+				//console.log(res.body[0]);
 				done();	
 			});	
 		});			  				  			 						
 	});	
+
+
+
 
 	it.skip('POST /rooms/{roomId}/resources ,CRUD Associate a resources associated to room',function(done){	
 			jsonToModify=roomJson.resources.roomsAsoc;
