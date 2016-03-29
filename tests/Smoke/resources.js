@@ -3,15 +3,21 @@
 // the next line call the file init.js to declare a global var(GLOBAL.initialDirectory)
 var init = require('../../init');
 var config = require(GLOBAL.initialDirectory+'/config/config.json');
-var resourceConfig = require(GLOBAL.initialDirectory+config.path.resourceConfig);
 var expect = require('chai').expect;
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var util = require(GLOBAL.initialDirectory+config.path.util);
+var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
+
+
+var resourceConfig = requireServices.resourceConfig;
+var tokenAPI = requireServices.tokenAPI;
+var roomManagerAPI = requireServices.roomManagerAPI;
+var endPoints = requireServices.endPoints;
+var util = requireServices.util;
 //EndPoints
 var url = config.url;
+
+
 var resourceEndPoint = url+endPoints.resources;
+
 // global variables
 var token = null; 
 
@@ -125,6 +131,15 @@ describe('Resources Smoke tests', function () {
 		it('Delete /resources/{id}', function (done) {
 			roomManagerAPI
 				.del(token,resourceEndPoint+'/'+resourceId,function(err,res){
+					expect(res.status).to.equal(config.httpStatus.Ok);
+					done();
+				});
+		});
+		it('Delete /resources', function (done){
+		//var JsonId = {_id: '['+resourceId+']'};
+			roomManagerAPI
+				.delwithJson(token, resourceEndPoint, resourceId, function(err, res){
+					console.log(res.body+ 'BODY');
 					expect(res.status).to.equal(config.httpStatus.Ok);
 					done();
 				});

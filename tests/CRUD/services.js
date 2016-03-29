@@ -4,20 +4,26 @@ var init = require('../../init.js');
 var config = require(GLOBAL.initialDirectory+'/config/config.json');
 var expect = require('chai').expect;
 var assert = require('chai').assert;
+var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
+
 //Configuration
 var serviceConfig = require(GLOBAL.initialDirectory+config.path.serviceConfig);
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var mongodb = require(GLOBAL.initialDirectory+config.path.mongodb);
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
+
+var tokenAPI = requireServices.tokenAPI;
+var roomManagerAPI =  requireServices.roomManagerAPI;
+var mongodb = requireServices.mongodb;
+var endPoints = requireServices.endPoints;
 //End Points
-var url = config.url;
-var serviceEndPoint = url+endPoints.services;
-var serviceEndPointPost = serviceEndPoint + serviceConfig.postFilter;;
-var serviceTypes = url+endPoints.serviceTypes;
+var url = requireServices.url;
+var serviceEndPoint = requireServices.servicesEndPoint;
+var serviceTypes = requireServices.servicesTypes;
+
+var serviceEndPointPost = serviceEndPoint + serviceConfig.postFilter;
 var roomEndPoint = serviceEndPoint;
 //this var helps to concat an End point to get an specific room
 var rooms = endPoints.rooms;
+
+
 //Global Variables
 var token = null; 
 var idService = 0;

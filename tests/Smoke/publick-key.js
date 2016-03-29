@@ -1,17 +1,16 @@
-//Smoke TC pgp public-key
-//Miguel Angel Terceros Caballero
 
-var expect = require('chai').expect;
-//import libraries
 var init = require('../../init');
 var config = require(GLOBAL.initialDirectory+'/config/config.json');
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var expect = require('chai').expect;
+var requireServices = new RequireServices();
 
-//url
-var publicKeyEndPoint = config.url + endPoints.publicKey;
+var roomManagerAPI =  requireServices.roomManagerAPI();
+var publicKeyEndPoint = requireServices.publicKeyEndPoint(); 
 
 describe('Smoke TC PGP public-key', function () {
+
+    this.timeout(config.timeOut);
 
 	before(function (done) {
 		this.timeout(config.timeOut);

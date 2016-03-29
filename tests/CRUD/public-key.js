@@ -5,12 +5,15 @@ var expect = require('chai').expect;
 //import libraries
 var init = require('../../init');
 var config = require(GLOBAL.initialDirectory+'/config/config.json');
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var publicKey = require(GLOBAL.initialDirectory+config.path.publicKey);
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
+
+//var endPoints = requireServices.endPoint();
+var roomManagerAPI = requireServices.roomManagerAPI();
+var publicKey = requireServices.publicKey();
 
 //url
-var publicKeyEndPoint = config.url + endPoints.publicKey;
+var publicKeyEndPoint = requireServices.publicKeyEndPoint(); 
 //declare variables for structure of the key
 var publicKeyBegin = publicKey.publicKeyStructure.publicKeyBegin; 
 var publicKeyVersion = publicKey.publicKeyStructure.publicKeyVersion;
@@ -19,6 +22,8 @@ var publicKeyType = publicKey.publicKeyType;
 //variables of endblockkey
 var endBlocKeyBegin = publicKey.endKeyBlock.begin;
 var endBlocKeyEnd = publicKey.endKeyBlock.end;
+
+
 
 describe('Smoke TC PGP public-key', function () {
 

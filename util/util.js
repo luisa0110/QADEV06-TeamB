@@ -24,7 +24,7 @@ exports.generateString = generateString;
  */
 var getRandomResourcesJson = function(size){
 
-    if(size==undefined)
+    if(size == undefined)
         size = 12;
     var resourceJSon = resourceConfig.resourceJson;
         resourceJSon = JSON.stringify(resourceJSon)
@@ -37,6 +37,7 @@ var getRandomResourcesJson = function(size){
         return resourceJSon;
 };
 exports.getRandomResourcesJson = getRandomResourcesJson;
+
 
 var getResourcesJson = function(name,customName,from,description){
 
@@ -63,11 +64,11 @@ exports.getResourcesJson = getResourcesJson;
  */
  var generateOutOforderJson = function (id,from,to){
         var outOfOrder;
-		outOfOrderConfig.outOfOrderJson.roomId=id;
-		outOfOrderConfig.outOfOrderJson.from=from;
-		outOfOrderConfig.outOfOrderJson.to=to;
-		outOfOrderConfig.outOfOrderJson.title=generateString(outOfOrderConfig.titleSize);
-		outOfOrder=outOfOrderConfig.outOfOrderJson
+		outOfOrderConfig.outOfOrderJson.roomId = id;
+		outOfOrderConfig.outOfOrderJson.from = from;
+		outOfOrderConfig.outOfOrderJson.to = to;
+		outOfOrderConfig.outOfOrderJson.title = generateString(outOfOrderConfig.titleSize);
+		outOfOrder = outOfOrderConfig.outOfOrderJson
 		return 	outOfOrder;
 
 };
@@ -153,16 +154,16 @@ exports.generateLocationJson = generateLocationJson;
 
 var getDate = function(num){
     var date = new Date();
-    var day =date.getDate()+num;
-    var month =date.getMonth()+1;
+    var day = date.getDate() + num;
+    var month = date.getMonth()+1;
     var aleatorio = (Math.round(Math.random()*23))+1;
-    if(aleatorio<10){aleatorio='0'+aleatorio}
-    if(num==0){aleatorio=23}
-         if(day>31){
-            month =date.getMonth()+2;
-            day='0'+(1+num);
+    if(aleatorio < 10){ aleatorio = '0'+ aleatorio }
+    if(num == 0){aleatorio = 23}
+         if(day > 31){
+            month = date.getMonth()+2;
+            day = '0' + (1 + num);
          }
-    var time = date.getFullYear()+'-'+(month)+'-'+(day)+'T'+aleatorio+':00:00.000Z';
+    var time = date.getFullYear() + '-' + (month) + '-' + (day) + 'T' + aleatorio + ':00:00.000Z';
     return time;
 }
 exports.getDate = getDate;
@@ -194,3 +195,11 @@ var getDateFromUnixTimeStamp = function (timeStamp) {
 };
 
 exports.getDateFromUnixTimeStamp = getDateFromUnixTimeStamp;
+
+var contains = function(text, textToCompare){
+
+  return (text.indexOf(textToCompare) > -1)
+
+};
+
+exports.contains = contains;
