@@ -208,8 +208,13 @@ describe('Smoke test for RoomManager ROOT', function(){
 						done();
 					});
 			}
+			done();
 		});
+<<<<<<< HEAD
+		it.skip('DELETE /services Smoke Test, Verify the status 200 after to delete a service',function(done)
+=======
 		it('DELETE /services Smoke Test, Verify the status 200 after to delete a service',function(done)
+>>>>>>> 4a51bbb3c7e3781a43863afdf57105dfed07fb90
 		{
 			roomManagerAPI
 				.del(token, serviceEndPoint + '/' + idService, function(err, resp)

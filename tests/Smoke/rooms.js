@@ -92,9 +92,9 @@ describe('Smoke Testing for Room routes', function() {
 				done();
 			});	
 	});
-	/*
-	* otro smoke para room
-	*/
+/*
+* Smoke Test to the service room with the method get a meetings
+*/
 	it('Get /rooms/{roomId}/meetings, Verify the status 200 ',function(done){	
 		endPoint = endPoint + '/meetings';
 		roomManagerAPI.

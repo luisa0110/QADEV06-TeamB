@@ -60,9 +60,9 @@ describe('CRUD Testing for Room routes', function() {
 	});
 
 /**
- * TODO
+ * this test verifies that API returns all rooms
  */
-	it('Get /rooms , <TODO>',function(done){
+	it('Get /rooms api returns all rooms',function(done){
 		roomManagerAPI.
 			get(endPoint,function(err,res){
 				mongodb.findDocuments('rooms',function(doc){
@@ -75,9 +75,9 @@ describe('CRUD Testing for Room routes', function() {
 			});
 	});	
 /**
- * TODO
+ * this test verifies that API returns the room specified
  */
-	it('Get /rooms/{roomId}, <TODO> ',function(done){	
+	it('Get /rooms/{roomId} api returns the room specified ',function(done){	
 		endPoint=endPoint+'/'+room._id;
 		roomManagerAPI.
 			get(endPoint,function(err,res){
@@ -98,9 +98,9 @@ describe('CRUD Testing for Room routes', function() {
 	});	
 
 /**
- *TODO
+ *this test verifies that API returns the room modified
  */
-	it('PUT /rooms/{roomId}, <TODO>',function(done){	
+	it('PUT /rooms/{roomId} api returns the room modified',function(done){	
 		json.customDisplayName='ChangedByAPI';
 		roomManagerAPI.
 			put(token,endPoint,json,function(err,res){
@@ -112,4 +112,17 @@ describe('CRUD Testing for Room routes', function() {
 				});
 			});	
 	});
+/*
+* move this tcs to services/789/rooms/132/meetings
+*/
+	it('Get /rooms/{roomId}/meetings, api returns all meetings ',function(done){	
+		endPoint=endPoint+'/meetings';
+		roomManagerAPI.
+			get(endPoint,function(err,res){
+				expect(res.status).to.equal(config.httpStatus.Ok);
+				//TODO
+				done();
+			});
+	});
+
 });
