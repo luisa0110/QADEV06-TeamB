@@ -209,7 +209,7 @@ describe('Smoke test for RoomManager ROOT', function(){
 					});
 			}
 		});
-		it.only('DELETE /services Smoke Test, Verify the status 200 after to delete a service',function(done)
+		it('DELETE /services Smoke Test, Verify the status 200 after to delete a service',function(done)
 		{
 			roomManagerAPI
 				.del(token, serviceEndPoint + '/' + idService, function(err, resp)

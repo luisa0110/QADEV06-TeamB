@@ -1,8 +1,11 @@
 
 var init = require('../../init');
+
 var config = require(GLOBAL.initialDirectory+'/config/config.json');
 var expect = require('chai').expect;
 var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
+
+
 
 describe('Smoke testing for Authentication (token)', function () {
 

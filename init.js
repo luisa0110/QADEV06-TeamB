@@ -1,19 +1,21 @@
 //GLOBAL.initialDirectory contains the root directory
 GLOBAL.initialDirectory = __dirname;
+var RequireServices = require(GLOBAL.initialDirectory + '/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
 
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
-
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var authorization=config.tokenHeader;
-var tokenPrefix=config.tokenPrefix;
+var config = requireServices.config();
+var tokenAPI = requireServices.tokenAPI();
+var roomManagerAPI = requireServices.roomManagerAPI();
+var authorization = config.tokenHeader;
+var tokenPrefix = config.tokenPrefix;
 var url = config.url;
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var servicesJson = require(GLOBAL.initialDirectory+config.path.serviceConfig);
+var endPoints = requireServices.endPoint();
+var servicesJson = config.path.serviceConfig;
 var exchangeAccountJson = config.exchangeAccount;
-var serviceEndPoint = url+endPoints.services;
+var serviceEndPoint = url + endPoints.services;
+
 /**
- * this method starts the exchange service usen the credential provided in the config.json
+ * this method starts the exchange service using the credential provided in the config.json
  * @paramToken  {is a string token}
  * @param  {done}
  * @return {none}
