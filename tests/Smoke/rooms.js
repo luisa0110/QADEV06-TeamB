@@ -182,6 +182,7 @@ describe('Smoke Testing for Room Resources routes ', function() {
 	});
 
 
+
 	it('GET /rooms/{:roomId}/resources/{:roomResourceId}, Verify the status 200',function(done){													
 			endPoint = endPoint + '/' + resourceAsoc.body.resources[0]._id;
 			roomManagerAPI.get(endPoint,function(err,res){
