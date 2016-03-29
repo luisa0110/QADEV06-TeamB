@@ -1,15 +1,23 @@
+/*
+room.js
+smoke test
+author: unknown
+test modified by: Andres Uzeda
+*/
+//libs
 var init = require('../../init');
 var expect = require('chai').expect;
-var requireServices =  require(GLOBAL.initialDirectory+'/lib/req-serv.js');
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
 var config =require(GLOBAL.initialDirectory+'/config/config.json');
 var roomJson = require(GLOBAL.initialDirectory+'/config/room.json');
 //services
-var tokenAPI = requireServices.tokenAPI;
-var roomManagerAPI = requireServices.roomManagerAPI;
-var mongodb = requireServices.mongodb;
-var endPoints	=	requireServices.endPoints;
-var resourceConfig = requireServices.resourceConfig;
-var util = requireServices.util;
+var tokenAPI = requireServices.tokenAPI();
+var roomManagerAPI = requireServices.roomManagerAPI();
+var mongodb = requireServices.mongodb();
+var endPoints	=	requireServices.endPoint();
+var resourceConfig = requireServices.resourceConfig();
+var util = requireServices.util();
 //variables
 var token=null;
 var room=null;
@@ -19,7 +27,7 @@ var resourceAsoc=null;
 var endPoint=null;
 var endPoint2=null;
 
-
+/*TESTS*/
 describe('Smoke Testing for Room routes', function() {
 	process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 	this.timeout(config.timeOut);
@@ -36,10 +44,8 @@ describe('Smoke Testing for Room routes', function() {
 				token = res.body.token;
 				endPoint=config.url+endPoints.rooms;
 				json=roomJson.roomQueries.displayName;
-				//console.log(json);
 				mongodb.findDocument('rooms',json,function(doc){
 					room=doc;
-					console.log(room._id);
 					done();
 				});						
 			});
@@ -71,8 +77,6 @@ describe('Smoke Testing for Room routes', function() {
  */
 	it('Get /rooms/{roomId}, Verify the status 200 ',function(done){	
 		endPoint=endPoint+'/'+room._id;
-		console.log('hola');
-		console.log(room._id);
 		roomManagerAPI.
 			get(endPoint,function(err,res){
 				expect(res.status).to.equal(config.httpStatus.Ok);
@@ -92,6 +96,38 @@ describe('Smoke Testing for Room routes', function() {
 				done();
 			});	
 	});
+	/*
+	* otro smoke para room
+	*/
+	it('Get /rooms/{roomId}/meetings, Verify the status 200 ',function(done){	
+		endPoint=endPoint+'/meetings';
+		roomManagerAPI.
+			get(endPoint,function(err,res){
+				expect(res.status).to.equal(config.httpStatus.Ok);
+				done();
+			});
+	});
+	/**/
+	/*it('POST /rooms/{roomId}/meetings, Verify the status 200',function(done){	
+		var jsonMeeting = {
+			"organizer":"Andres1",
+			"title":"pollo",
+			"start":"2016-04-28T02:21:00.000Z",
+			"end":"2016-04-28T03:51:00.000Z",
+			"location":"Floor1Room1",
+			"roomEmail":"Floor1Room1@sinergy.eng",
+			"resources":["Floor1Room1@sinergy.eng"],
+			"attendees":["Andres1@sinergy.eng"],
+			"optionalAttendees":[]
+		};
+		console.log(endPoint);
+		roomManagerAPI.
+			post(token,endPoint,jsonMeeting,function(err,res){
+				expect(res.status).to.equal(config.httpStatus.Ok);
+				done();
+			});	
+	});*/
+
 });
 //de aca abajo bn la mayoria
 describe('Smoke Testing for Room Resources routes ', function() {
@@ -142,7 +178,6 @@ describe('Smoke Testing for Room Resources routes ', function() {
 	it('GET /rooms/{roomId}/resources,Verify the status 200',function(done){	
 			roomManagerAPI.get(endPoint,function(err,res){
 				expect(res.status).to.equal(config.httpStatus.Ok);
-				console.log(room._id);
 				done();
 			});			  				  			 						
 	});	
