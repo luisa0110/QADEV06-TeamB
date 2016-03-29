@@ -1,25 +1,26 @@
-//CRUD testing - POST Authentication
-//Author Ariel Wagner Rojas
-// the next line call the file init.js to declare a global var(GLOBAL.initialDirectory)
+
 var init = require('../../init');
-//with config it can use the parameters located into the config file
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
 var expect = require('chai').expect;
-//with tokenAPI it can use the methods located into the tokenAPI file
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var util = require(GLOBAL.initialDirectory+config.path.util);
+
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
+
+var config = requireServices.config();
+var tokenAPI = requireServices.tokenAPI();
+var util = requireServices.util();
 
 describe('CRUD testing for Authentication (token)', function () {
 
 	this.timeout(config.timeOut);
-
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 	before('Setting for obtain the token', function(){
-        process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+       // process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
     });
 
     it('POST /Authentication/login (local) Verify that returns a valid token when the entered credentials are correct', function (done){
 		tokenAPI
 		.getToken(function(err, res){
+			
 			expect(res.status).to.equal(config.httpStatus.Ok);
 			expect(res.body.token).to.not.be.undefined;
 			expect(res.body).to.have.property("token");
@@ -49,6 +50,7 @@ describe('CRUD testing for Authentication (token)', function () {
 			}
 			expect(res.status).to.equal(config.httpStatus.Ok);
 			expect(res.body.createdAt).to.not.be.undefined;
+
 			done();
 		});
 	});

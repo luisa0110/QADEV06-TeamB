@@ -29,6 +29,7 @@ var token,idService,idRoom,idResourceCreate,
     resourceJSon,associateResource,
     idLastResource,endPointFinal,enPointRes;
 
+var statusExpected = config.httpStatus.Ok;
 
 describe('Smoke test for RoomManager',function()
 {
@@ -101,7 +102,7 @@ describe('Smoke test for RoomManager',function()
 		//get the resource of a room specified
 		roomManagerAPI
 			.get(endPointFinal, function(err, re){							
-				expect(re.status).to.equal(config.httpStatus.Ok);
+				expect(re.status).to.equal(statusExpected);
 				done();
 			});			
 
@@ -114,7 +115,7 @@ describe('Smoke test for RoomManager',function()
 		//put the last resource
 		roomManagerAPI
 			.put(token,endPointFinal, quantityJON, function(err, re){						
-				expect(re.status).to.equal(config.httpStatus.Ok);
+				expect(re.status).to.equal(statusExpected);
 				done();
 			});										
 	});
@@ -123,7 +124,7 @@ describe('Smoke test for RoomManager',function()
 		//delete the last resource
 		roomManagerAPI
 			.del(token, endPointFinal, function(err, re){
-				expect(re.status).to.equal(config.httpStatus.Ok);
+				expect(re.status).to.equal(statusExpected);
 
 				done();
 			});				
@@ -132,7 +133,7 @@ describe('Smoke test for RoomManager',function()
     it('Get /services/{:serviceId}/rooms/{:roomId}/resources',function(done){
        roomManagerAPI
          .get(enPointRes, function(err,res){
-           expect(res.status).to.equal(config.httpStatus.Ok);
+           expect(res.status).to.equal(statusExpected);
            done();
          });
     });
@@ -144,7 +145,7 @@ describe('Smoke test for RoomManager',function()
 
        roomManagerAPI
           .post(token,enPointRes,jsonResource, function(err,res) {
-                expect(res.status).to.equal(config.httpStatus.Ok);
+                expect(res.status).to.equal(statusExpected);
                 done();
           });
       

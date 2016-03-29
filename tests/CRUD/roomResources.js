@@ -39,6 +39,8 @@ var room,token,idService,idRoom,
     associateResource,idLastResource,
     endPointFinal,roomJSON,size,enPointRes;
 
+var statusExpected = config.httpStatus.Ok;
+
 describe('CRUD test for RoomResources',function(){
 	this.timeout(config.timeOut);
 	before(function (done) {
@@ -114,7 +116,7 @@ describe('CRUD test for RoomResources',function(){
 				roomManagerAPI
 					.get(endPointFinal, function(err, re){
 										
-						expect(re.status).to.equal(config.httpStatus.Ok);
+						expect(re.status).to.equal(statusExpected);
 						resourcesResId = (res.resources[size-1]._id).toString();
 						expect(resourcesResId).to.equal(re.body._id);						
 						expect(re.body).to.have.property("_id");
@@ -133,7 +135,7 @@ describe('CRUD test for RoomResources',function(){
 			.put(token,endPointFinal, quantityJON, function(err, resp){
 				mongodb
 					.findDocument('rooms', roomJSON, function(res){	
-						expect(resp.status).to.equal(config.httpStatus.Ok);
+						expect(resp.status).to.equal(statusExpected);
 						resourcesMongoId = (res.resources[size-1]._id).toString();
 						resourcesAPIpId = (resp.body.resources[size-1]._id).toString();
 						expect(resourcesMongoId).to.equal(resourcesAPIpId);
@@ -164,7 +166,7 @@ describe('CRUD test for RoomResources',function(){
 			.del(token, endPointFinal, function(err, re){
 				mongodb
 					.findDocument('rooms', roomJSON, function(res){								
-						expect(re.status).to.equal(config.httpStatus.Ok);												
+						expect(re.status).to.equal(statusExpected);												
 						expect(re.body.resources[size-1]).to.not.exist;
 						expect(res.emailAddress).to.equal(re.body.emailAddress);
 						expect(res.displayName).to.equal(re.body.displayName);
@@ -182,7 +184,7 @@ describe('CRUD test for RoomResources',function(){
 	it('Get /services/{:serviceId}/rooms/{:roomId}/resources',function(done){
        roomManagerAPI
          .get(enPointRes, function(err,res){ 
-           expect(res.status).to.equal(config.httpStatus.Ok);
+           expect(res.status).to.equal(statusExpected);
            expect(res.body[0]).to.have.property('_id');     
            expect(idLastResource).to.equal(idResourceCreate);
            done();
@@ -201,7 +203,7 @@ describe('CRUD test for RoomResources',function(){
                 arrayProperties.forEach( function (prop) {
 					expect(res.body).to.have.property(prop);
 			    });
-                expect(res.status).to.equal(config.httpStatus.Ok);
+                expect(res.status).to.equal(statusExpected);
                 expect(idLastResource).to.equal(idResourceCreate);
                 done();
           });

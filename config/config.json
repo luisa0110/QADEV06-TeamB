@@ -13,11 +13,10 @@
 	},
 	"path":{
 		"tokenAPI" : "/lib/tokenAPI",
+        "apk" : "/config/apk.json",
 		"endPoints" : "/config/endPoints.json",
 		"resourceConfig" : "/config/resource.json",
-		"roomManagerAPI" : "/lib/roomManagerAPI",
 		"outOfOrder" : "/config/outOfOrder.json",
-		"apk" : "/config/apk.json",
 		"publicKey" : "/config/publicKey.json",
 		"roomResource" : "/config/roomResource.json",
 		"locationConfig":"/config/locations.json",
