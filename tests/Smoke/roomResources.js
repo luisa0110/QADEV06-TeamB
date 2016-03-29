@@ -2,14 +2,13 @@
 //smoke test from Miguel Angel Terceros Caballero
 
 var init = require('../../init');
-
 var expect = require('chai').expect;
 
 var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
 
 var requireServices = new RequireServices();
 
-var config = requireServices.config();
+var config          = requireServices.config();
 var tokenAPI        = requireServices.tokenAPI();
 var roomManagerAPI  = requireServices.roomManagerAPI();
 var endPoints       = requireServices.endPoint();
@@ -74,8 +73,6 @@ describe('Smoke test for RoomManager',function()
 						};
 						//endpoint for associate an resource to room
 						  var associateEndPoint = roomsEndPoint + '/' + idRoom + '/resources';
-                                                      
-
 						//associate resource to room
 						roomManagerAPI
 							.post(token,associateEndPoint,associateResource, function(err, res){										
@@ -132,7 +129,6 @@ describe('Smoke test for RoomManager',function()
 			});				
 	});
   
-
     it('Get /services/{:serviceId}/rooms/{:roomId}/resources',function(done){
        roomManagerAPI
          .get(enPointRes, function(err,res){
@@ -153,9 +149,6 @@ describe('Smoke test for RoomManager',function()
           });
       
     });
-    
-
-
 });
 
 
