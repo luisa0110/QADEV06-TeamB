@@ -21,6 +21,8 @@ var util = requireServices.util();
 //variables
 var token,room,resource,json,resourceAsoc,endPoint,endPoint2;
 
+var statusExpected = config.httpStatus.Ok;
+
 /*TESTS*/
 describe('Smoke Testing for Room routes', function() {
 	process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -61,7 +63,7 @@ describe('Smoke Testing for Room routes', function() {
 	it('Get /rooms , Verify the status 200',function(done){
 		roomManagerAPI.
 			get(endPoint,function(err,res){
-				expect(res.status).to.equal(config.httpStatus.Ok);
+				expect(res.status).to.equal(statusExpected);
 				done();
 			});
 	});	
@@ -73,7 +75,7 @@ describe('Smoke Testing for Room routes', function() {
 		endPoint = endPoint + '/' + room._id;
 		roomManagerAPI.
 			get(endPoint,function(err,res){
-				expect(res.status).to.equal(config.httpStatus.Ok);
+				expect(res.status).to.equal(statusExpected);
 				done();
 			});
 	});	
@@ -86,7 +88,7 @@ describe('Smoke Testing for Room routes', function() {
 		json.customDisplayName = 'ChangedByAPI';
 		roomManagerAPI.
 			put(token,endPoint,json,function(err,res){
-				expect(res.status).to.equal(config.httpStatus.Ok);
+				expect(res.status).to.equal(statusExpected);
 				done();
 			});	
 	});
@@ -97,7 +99,7 @@ describe('Smoke Testing for Room routes', function() {
 		endPoint = endPoint + '/meetings';
 		roomManagerAPI.
 			get(endPoint,function(err,res){
-				expect(res.status).to.equal(config.httpStatus.Ok);
+				expect(res.status).to.equal(statusExpected);
 				done();
 			});
 	});
@@ -123,7 +125,7 @@ describe('Smoke Testing for Room routes', function() {
 	});*/
 
 });
-//de aca abajo bn la mayoria
+
 describe('Smoke Testing for Room Resources routes ', function() {
 	this.timeout(config.timeOut);
 
@@ -165,34 +167,25 @@ describe('Smoke Testing for Room Resources routes ', function() {
 			});	
 	});
 
-/**
- * Smoke Test to the service room with the method get for getting a resource for
- * a specific room .
- */
+
 	it('GET /rooms/{roomId}/resources,Verify the status 200',function(done){	
 			roomManagerAPI.get(endPoint,function(err,res){
-				expect(res.status).to.equal(config.httpStatus.Ok);
+				expect(res.status).to.equal(statusExpected);
 				done();
 			});			  				  			 						
 	});	
 
-/**
- * Smoke Test to the service room with the method POST 
- * for associates the room with an existent resource.
- */
+
 	it('POST rooms/{:roomId}/resources, Verify the status 200',function(done){		
-		expect(resourceAsoc.status).to.equal(config.httpStatus.Ok);
+		expect(resourceAsoc.status).to.equal(statusExpected);
   		done();
 	});
 
-/**
- * Smoke Test to the service room with the method GET 
- * for getting a specific resources of a specific room.
- */
+
 	it('GET /rooms/{:roomId}/resources/{:roomResourceId}, Verify the status 200',function(done){													
 			endPoint = endPoint + '/' + resourceAsoc.body.resources[0]._id;
 			roomManagerAPI.get(endPoint,function(err,res){
-				expect(res.status).to.equal(config.httpStatus.Ok);	
+				expect(res.status).to.equal(statusExpected);	
 				done();
 			})
 	});	
@@ -203,8 +196,8 @@ describe('Smoke Testing for Room Resources routes ', function() {
  */			
 	it('PUT /rooms/{:roomId}/resources/{:roomResourceId}, Verify the status 200',function(done){		
 			 json = roomJson.roomQueries.resourcesUpdate;
-			roomManagerAPI.put(token,endPoint,json,function(err,resp){
-				expect(resp.status).to.equal(config.httpStatus.Ok);	
+			roomManagerAPI.put(token,endPoint,json,function(err,res){
+				expect(res.status).to.equal(statusExpected);	
 				done();		
 			});
 	});	
@@ -214,8 +207,8 @@ describe('Smoke Testing for Room Resources routes ', function() {
  * for Removing a specific resource from a specific room
  */	
 	it('DELETE /rooms/{:roomId}/resources/{:roomResourceId}, Verify the status 200 ',function(done){	
-		 roomManagerAPI.del(token,endPoint,function(err,resp){
-		 	expect(resp.status).to.equal(config.httpStatus.Ok);	
+		 roomManagerAPI.del(token,endPoint,function(err,res){
+		 	expect(res.status).to.equal(statusExpected);	
 			done();			
 		 });						
 	});	

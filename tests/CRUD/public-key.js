@@ -1,5 +1,3 @@
-//CRUD TC PGP public-key
-//Miguel Angel Terceros Caballero
 
 var expect = require('chai').expect;
 //import libraries
@@ -14,11 +12,13 @@ var publicKey = requireServices.publicKey();
 
 //url
 var publicKeyEndPoint = requireServices.publicKeyEndPoint(); 
+
 //declare variables for structure of the key
 var publicKeyBegin = publicKey.publicKeyStructure.publicKeyBegin; 
 var publicKeyVersion = publicKey.publicKeyStructure.publicKeyVersion;
 var publicKeyEnd = publicKey.publicKeyStructure.publicKeyEnd;
 var publicKeyType = publicKey.publicKeyType;
+
 //variables of endblockkey
 var endBlocKeyBegin = publicKey.endKeyBlock.begin;
 var endBlocKeyEnd = publicKey.endKeyBlock.end;
@@ -33,7 +33,7 @@ describe('Smoke TC PGP public-key', function () {
 		done();
 	});	
 
-	it('verify that the public-key contains an begin block, version, end block', function(done) {		  
+	it('Verify that the public-key contains an begin block, version, end block', function(done) {		  
 						 
 		roomManagerAPI
 			.get(publicKeyEndPoint, function(err, res){	
