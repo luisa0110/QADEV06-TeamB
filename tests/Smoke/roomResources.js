@@ -2,7 +2,6 @@
 //smoke test from Miguel Angel Terceros Caballero
 
 var init = require('../../init');
-
 var expect = require('chai').expect;
 
 var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
@@ -74,8 +73,6 @@ describe('Smoke test for RoomManager',function()
 						};
 						//endpoint for associate an resource to room
 						  var associateEndPoint = roomsEndPoint + '/' + idRoom + '/resources';
-                                                      
-
 						//associate resource to room
 						roomManagerAPI
 							.post(token,associateEndPoint,associateResource, function(err, res){										

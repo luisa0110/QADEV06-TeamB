@@ -1,10 +1,10 @@
 // util
 var moment = require('moment');
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
-var resourceConfig = require(GLOBAL.initialDirectory+config.path.resourceConfig);
-var outOfOrderConfig = require(GLOBAL.initialDirectory+config.path.outOfOrder);
-var locationCongig = require(GLOBAL.initialDirectory+config.path.locationConfig);
-var meetingsConfig = require(GLOBAL.initialDirectory+config.path.meetingConfig);
+var config = require(GLOBAL.initialDirectory + '/config/config.json');
+var resourceConfig = require(GLOBAL.initialDirectory + config.path.resourceConfig);
+var outOfOrderConfig = require(GLOBAL.initialDirectory + config.path.outOfOrder);
+var locationCongig = require(GLOBAL.initialDirectory + config.path.locationConfig);
+var meetingsConfig = require(GLOBAL.initialDirectory + config.path.meetingConfig);
 
 
 var generateString = function(size){
