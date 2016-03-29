@@ -1,10 +1,10 @@
 {
 
-	"url" : "https://172.20.208.80:4040",
-	"urlmongodb" : "mongodb://172.20.208.80:27017/roommanager", 
+	"url" : "https://172.20.208.89:4040",
+	"urlmongodb" : "mongodb://172.20.208.89:27017/roommanager", 
 	"timeOut" : 8000,
 	"userAccountJson" : {
-		"username": "AndresUzeda2",
+		"username": "AnaPinto",
 	  	"password": "Control123",
 	  	"authentication": "local"
 	},	
@@ -36,7 +36,7 @@
 	"tokenBasicPrefix" : "Basic ",
 	"userBasicAccountJson" : "QXJpZWwuUm9qYXM6Q2xpZW50MTIz",
 	"exchangeAccount":{
-		"username":"AndresUzeda2",
+		"username":"AnaPinto",
 		"password":"Control123",
 		"hostname":"sinergy.eng"
 	}
