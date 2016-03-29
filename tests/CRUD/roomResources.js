@@ -71,7 +71,7 @@ describe('CRUD test for RoomResources',function(){
 				idRoom = res.body[0]._id;//id room				
 				resourceJSon = util.getRandomResourcesJson(resourceConfig.resourceNameSize);								
 				//create a new resource
-				roomManagerAPI
+				 roomManagerAPI
 					.post(token, resourceEndPoint, resourceJSon, function(err,resp){
 						idResourceCreate = resp.body._id;
 						//json for associate resource to room
