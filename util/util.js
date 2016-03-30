@@ -68,7 +68,7 @@ exports.getResourcesJson = getResourcesJson;
 		outOfOrderConfig.outOfOrderJson.from = from;
 		outOfOrderConfig.outOfOrderJson.to = to;
 		outOfOrderConfig.outOfOrderJson.title = generateString(outOfOrderConfig.titleSize);
-		outOfOrder = outOfOrderConfig.outOfOrderJson
+		outOfOrder = outOfOrderConfig.outOfOrderJson;
 		return 	outOfOrder;
 
 };
@@ -156,14 +156,18 @@ var getDate = function(num){
     var date = new Date();
     var day = date.getDate() + num;
     var month = date.getMonth()+1;
-    var aleatorio = (Math.round(Math.random()*23))+1;
-    if(aleatorio < 10){ aleatorio = '0'+ aleatorio }
-    if(num == 0){aleatorio = 23}
+    var random = (Math.round(Math.random()*23))+1;
+    if(random < 10){ random = '0'+ random }
+    if(num == 0){random = 23}
          if(day > 31){
             month = date.getMonth()+2;
             day = '0' + (1 + num);
          }
-    var time = date.getFullYear() + '-' + (month) + '-' + (day) + 'T' + aleatorio + ':00:00.000Z';
+    if(month < 10)
+    {
+        month = '0' + month;
+    }
+    var time = date.getFullYear() + '-' + (month) + '-' + (day) + 'T' + random + ':00:00.000Z';
     return time;
 }
 exports.getDate = getDate;
