@@ -1,12 +1,9 @@
-//Services
-//Author : Joaquin Gonzales Mosquera
 var init          = require('../../init.js');
-var config        = require(GLOBAL.initialDirectory+'/config/config.json');
-var serviceConfig = require(GLOBAL.initialDirectory+config.path.serviceConfig);
 var expect        = require('chai').expect;
-
 var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
 var requireServices = new RequireServices();
+var config        = requireServices.config();
+var serviceConfig = require(GLOBAL.initialDirectory+config.path.serviceConfig);
 
 var tokenAPI = requireServices.tokenAPI();
 var roomManagerAPI = requireServices.roomManagerAPI();
@@ -58,25 +55,28 @@ describe('Smoke test for RoomManager ROOT', function(){
 		roomManagerAPI
 				.getwithToken(token,serviceEndPoint,function(err,res)
 				{
-					idService=res.body;
-					if(idService.length>0)
+					if(res.body.length <= 0)
 					{
 						roomManagerAPI
 							.post(token,serviceEndPointFilter,adminJson,function(err,resp){
-							console.log(resp.body);
-							expect(resp.status).to.equal(ok);
+								idService=res.body._id;
+								existService = false;
 							done();
 							});
 					}
-					else done();
+					else{
+						existService = true;
+						idService=res.body._id;
+						done();
+					} 
 			});
 		});
 		after(function(done){
 			roomManagerAPI
 				.getwithToken(token,serviceEndPoint,function(err,res)
 				{
-					idService=res.body;
-					if(idService.length>0)
+					idService = res.body;
+					if(idService.length > 0 && existService === false)
 					{
 						roomManagerAPI
 							.del(token,serviceEndPoint+'/'+idService[0]._id,function(err,res)
@@ -84,10 +84,14 @@ describe('Smoke test for RoomManager ROOT', function(){
 								done();
 							});
 					}
-					 else done(); 
+					 else {
+						 existService = false;
+						 done();
+					 } 
+					 
 				});
 		});
-		it ('GET /servicesType SmokeTest, Verify the status 200',function(done)
+		it('GET /servicesType SmokeTest, Verify the status 200',function(done)
 		{
 			roomManagerAPI
 				.get(serviceTypes,function(err,res)
@@ -176,18 +180,19 @@ describe('Smoke test for RoomManager ROOT', function(){
 	});
 	
 
-	describe('Method of Delete Service',function()
+	describe('DEL /service/serviceID',function()
 	{
 		before(function(done)
 		{
 			roomManagerAPI
 				.getwithToken(token,serviceEndPoint,function(err,res)
 				{
-					if(res.body.length === 0){
+					if(res.body.length <= 0){
 						roomManagerAPI
 							.post(token,serviceEndPointFilter, adminJson, function(err,res)
 							{
 								idService = res.body._id;
+								existService = false;
 								done();
 							});
 					}
@@ -196,8 +201,7 @@ describe('Smoke test for RoomManager ROOT', function(){
 						idService = res.body[0]._id;
 						done();
 					}					
-					
-			});
+				});
 		});
 		after(function(done)
 		{
@@ -208,18 +212,16 @@ describe('Smoke test for RoomManager ROOT', function(){
 						done();
 					});
 			}
-			done();
+			else {
+				done()};
 		});
-<<<<<<< HEAD
-		it.skip('DELETE /services Smoke Test, Verify the status 200 after to delete a service',function(done)
-=======
 		it('DELETE /services Smoke Test, Verify the status 200 after to delete a service',function(done)
->>>>>>> 4a51bbb3c7e3781a43863afdf57105dfed07fb90
 		{
 			roomManagerAPI
 				.del(token, serviceEndPoint + '/' + idService, function(err, resp)
 				{
 					expect(resp.status).to.equal(ok);
+					
 					done();
 				});
 		});
@@ -249,15 +251,16 @@ describe('Smoke test for RoomManager ROOT', function(){
 			roomManagerAPI
 				.del(token,serviceEndPoint+'/'+idService,function(err,res)
 				{
-					done();
-				});
-				if(existService){
+					if(existService){
 					roomManagerAPI
 						.post(token,serviceEndPointFilter,adminJson,function(err,resp)
 						{
 							done();
 						});
-				}
+					}
+					else done();
+				});
+				
 				
 		});
 		it('POST /services Smoke Test, Verify the status 200 after to add a new service',function(done)
@@ -270,5 +273,5 @@ describe('Smoke test for RoomManager ROOT', function(){
 					done();
 				});
 		});
-	});	
+	});
 });
