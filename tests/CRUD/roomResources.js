@@ -1,214 +1,253 @@
-//CRUD of roomResources
-
-var init            = require('../../init');
-
+//CRUD TC rooms
+//Brayan Gabriel Rosas Fernandez
+var init = require('../../init');
+var expect = require('chai').expect;
 var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
 var requireServices = new RequireServices();
-var expect          = require('chai').expect;
-//services
-var config        = requireServices.config();
 
-var tokenAPI       = requireServices.tokenAPI();
-var roomManagerAPI = requireServices.roomManagerAPI();
-
-var util           = requireServices.util();
-var mongodb        = requireServices.mongodb();
-
-//config
-var endPoints      = requireServices.endPoint();
+var config = requireServices.config();
 var resourceConfig = requireServices.resourceConfig();
-var roomResource   = requireServices.roomResource();
+var tokenAPI = requireServices.tokenAPI();
+var roomManagerAPI = requireServices.roomManagerAPI();
+var endPoints = requireServices.endPoint();
+var util = requireServices.util();
+var roomJson = require(GLOBAL.initialDirectory+config.path.room);
+var mongodb = requireServices.mongodb();
 
-//End Points
-var url              = requireServices.url();
-var servicesEndPoint = requireServices.servicesEndPoint();
-var roomsEndPoint    = requireServices.roomsEndPoint();
-var resourceEndPoint = requireServices.resourceEndPoint();
-
-
-var resources = endPoints.resources;
-var rooms     = endPoints.rooms;
-
-var arrayProperties = ['_id','emailAddress','displayName','serviceId',
-						'resources','customDisplayName','enabled','locationId'];
-
+//EndPoints
+var url = config.url;
 
 // global variables
-var room,token,idService,idRoom,
-    idResourceCreate,resourceJSon,
-    associateResource,idLastResource,
-    endPointFinal,roomJSON,size,enPointRes;
+var token = null; 
+var jsonByDefault = roomJson.roomQueries.roomPut;
+var room = null;
+var rooms = null;
+var endPoint = config.url+endPoints.rooms;
+var endPoint2 = config.url+endPoints.resources;
+var jsonRoom = null;
 
-var statusExpected = config.httpStatus.Ok;
-
-describe('CRUD test for RoomResources',function(){
+describe('Resource CRUD Suite get by id and put', function () {
 	this.timeout(config.timeOut);
-	before(function (done) {
-				
-		process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-		//getting the token
+	process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+	before('Preconditions , get token and obtain a roomId',function (done) {	
 		tokenAPI
 			.getToken(function(err,res){
-				token = res.body.token;	
-				//getting serviceID
-				roomManagerAPI
-					.getwithToken(token, servicesEndPoint, function(err, resp){
-						idService = resp.body[0]._id;
-
-						done();			
-					});							
+				token = res.body.token;
+				jsonRoom=roomJson.roomQueries.customDisplayName;
+				mongodb.findDocument('rooms',jsonRoom,function(doc){
+					 room=doc;
+					done();
+				});						
 			});
 	});
 
-	after('After to create tests',function(done)
-	{
-		token = null;
-		done();
-	});
-
-	beforeEach(function (done) {		
-		//getting roomID
-		roomManagerAPI
-			.get(roomsEndPoint, function(err, res){
-				idRoom = res.body[0]._id;//id room				
-				resourceJSon = util.getRandomResourcesJson(resourceConfig.resourceNameSize);								
-				//create a new resource
-				 roomManagerAPI
-					.post(token, resourceEndPoint, resourceJSon, function(err,resp){
-						idResourceCreate = resp.body._id;
-						//json for associate resource to room
-						associateResource = {							
-							"resourceId" : idResourceCreate,
-							"quantity" : 1							
-						};
-						//endpoint for associate an resource to room
-						var associateEndPoint = url + '/rooms/' + idRoom + '/resources';
-						//associate resource to room
-						roomManagerAPI
-							.post(token,associateEndPoint ,associateResource, function(err, res){
-								//json of the room selected
-								roomName = res.body.customDisplayName;
-								roomJSON = {"customDisplayName" : roomName};									
-								size = res.body.resources.length;									
-								idLastResource = res.body.resources[size-1]._id;
-								//endPoint for execute actions over a room									
-								endPointFinal = servicesEndPoint + '/' + idService + rooms + '/' + idRoom + resources + '/' + idLastResource;
-								enPointRes = servicesEndPoint + '/' + idService + rooms + '/' + idRoom + resources;
-
-								done();
-							});						
-					});
-			});
-	});
-
-	afterEach(function (done) {
-		//delete resource create
-		roomManagerAPI
-			.del(token, +'/'+idResourceCreate,function(err,res){
+	after('Post conditions : restore the properties of the rooms changed ',function (done) {	
+			roomManagerAPI.
+				put(token,endPoint,jsonByDefault,function(err,res){
 				done();
+		});				
+	});
+
+	it('CRUD-GET /rooms/ api returns all rooms ', function (done) {
+		endPoint=endPoint
+			roomManagerAPI
+			.get(endPoint,function(err,res){
+					mongodb.findDocuments('rooms',function(doc){
+					 rooms=doc;
+					expect(err).to.be.null;
+					expect(res.status).to.equal(config.httpStatus.Ok);
+					expect(res.body.length).to.equal(rooms.length);
+					done();
+			});
+		});	
+	});
+
+	it('CRUD-GET /rooms/{:roomId} api returns the room specified', function (done) {
+			endPoint=endPoint+'/'+room._id;
+				roomManagerAPI
+				.get(endPoint,function(err,res){
+				expect(err).to.be.null;
+				expect(res.status).to.equal(config.httpStatus.Ok);
+				expect(res.body).to.have.property("displayName")
+					.and.be.equal(room.displayName);
+				expect(res.body).to.have.property("customDisplayName")
+					.and.be.equal(room.customDisplayName);
+				expect(res.body).to.have.property("emailAddress")
+					.and.be.equal(room.emailAddress);
+				expect(res.body).to.have.property("enabled")
+					.and.be.equal(room.enabled);
+				expect(res.body).to.have.property("_id")
+					.and.be.equal(room._id.toString());
+					done();
 			});	
 	});
 
-	it('CRUD-GET /services/{:serviceId}/rooms/{:roomId}/resources/{:roomResourceId} api returns the resources specified of a room', function (done) {
-		//get the resource of a room specified
-		mongodb
-			.findDocument('rooms',roomJSON,function(res){				
-				roomManagerAPI
-					.get(endPointFinal, function(err, re){
-										
-						expect(re.status).to.equal(statusExpected);
-						resourcesResId = (res.resources[size-1]._id).toString();
-						expect(resourcesResId).to.equal(re.body._id);						
-						expect(re.body).to.have.property("_id");
-						expect(re.body).to.have.property("@link");					
+	it.skip('CRUD-PUT /rooms/{:roomId} api returns the rooms modified', function (done) {
+		var jsonToModify=roomJson.roomQueries.roomPut;
+		jsonToModify.emailAddress=util.generateString(12);
+		jsonToModify.displayName=util.generateString(10);
+		jsonToModify.enabled=false;
+		jsonToModify.customDisplayName=util.generateString(10);
+		jsonToModify.code=util.generateString(5);
+		jsonToModify.__v=10;
+		roomManagerAPI.
+			put(token,endPoint,jsonToModify,function(err,res){
+				console.log('Json on the put TC '+JSON.stringify(roomJson.roomQueries.roomPut));
+				jsonRoom={"customDisplayName":res.customDisplayName};
+				mongodb.findDocument('rooms',jsonRoom.customDisplayName,function(doc){	
+					expect(err).to.be.null;
+					expect(res.status).to.equal(config.httpStatus.Ok);
+					expect(res.body).to.have.property("displayName")
+					.and.be.equal(doc.displayName);
+					expect(res.body).to.have.property("customDisplayName")
+					.and.be.equal(doc.customDisplayName);
+					expect(res.body).to.have.property("emailAddress")
+					.and.be.equal(doc.emailAddress);
+					expect(res.body).to.have.property("enabled")
+					.and.be.equal(doc.enabled);
+					expect(res.body).to.have.property("_id")
+					.and.be.equal(doc._id.toString());
+					expect(res.body).to.have.property("code")
+					.and.be.equal(doc.code);
+					expect(res.body).to.have.property("__v")
+					.and.be.equal(doc.__v);
+					done();
+				});															
+		   });			
+	});
+});
 
-						done();
-					});	
+
+
+
+describe('Rooms associated to Resources', function(done) {
+
+	before('Before Set',function (done) {
+		tokenAPI
+			.getToken(function(err,res){
+				token = res.body.token;
+				jsonRoom = roomJson.roomQueries.displayName;
+				console.log(jsonRoom);
+				console.log('...................');
+				mongodb.findDocument('rooms',jsonRoom,function(doc){
+					room = doc;
+						jsonRoom = util.getRandomResourcesJson(resourceConfig.resourceNameSize);
+						roomManagerAPI.post(token,endPoint2,jsonRoom,function(err,resourceRes){
+							resource = resourceRes;
+						 	endPoint = endPoint+'/'+room._id+'/resources';	
+						 	jsonRoom = roomJson.resources.roomsAsoc;	
+							jsonRoom.resourceId = resource.body._id;
+								roomManagerAPI.post
+									(token,endPoint,jsonRoom,function(err,resAsoc){
+									resourceAsoc = resAsoc;
+								console.log(doc);	
+									done();
+								});									
+						});	
+				});				
 			});		
 	});
 
-	it('CRUD-PUT /services/{:serviceId}/rooms/{:roomId}/resources/{:roomResourceId} api update the resources specified of a room', function (done) {
-		//variable for the modify an resource
-		var quantityJON = roomResource.amount;
-		//put the last resource
+	after('Before Set',function (done) {
+		endPoint2=endPoint2+'/'+resource.body._id;
 		roomManagerAPI
-			.put(token,endPointFinal, quantityJON, function(err, resp){
-				mongodb
-					.findDocument('rooms', roomJSON, function(res){	
-						expect(resp.status).to.equal(statusExpected);
-						resourcesMongoId = (res.resources[size-1]._id).toString();
-						resourcesAPIpId = (resp.body.resources[size-1]._id).toString();
-						expect(resourcesMongoId).to.equal(resourcesAPIpId);
-                        expect(res.resources[size-1].quantity).to.equal(resp.body.resources[size-1].quantity);
-						expect(res.emailAddress).to.equal(resp.body.emailAddress);
-						expect(res.displayName).to.equal(resp.body.displayName);
-						expect(res.customDisplayName).to.equal(resp.body.customDisplayName);
-						expect(res.enabled).to.equal(resp.body.enabled);
-						expect(res.locationId).to.equal(resp.body.locationId);
-
-						expect(resp.body.resources[size-1]).to.have.property("_id");										
-						expect(resp.body.resources[size-1]).to.have.property("quantity");
-
-						arrayProperties.forEach( function (prop) {
-							expect(res).to.have.property(prop);
-						});
-
-						done();
-					});				
-			});
-	});
-  
-    
-
-	it('CRUD-DEL /services/{:serviceId}/rooms/{:roomId}/resources/{:roomResourceId} api deleted the resources specified of a room', function (done) {
-		//delete the last resource
-		roomManagerAPI
-			.del(token, endPointFinal, function(err, re){
-				mongodb
-					.findDocument('rooms', roomJSON, function(res){								
-						expect(re.status).to.equal(statusExpected);												
-						expect(re.body.resources[size-1]).to.not.exist;
-						expect(res.emailAddress).to.equal(re.body.emailAddress);
-						expect(res.displayName).to.equal(re.body.displayName);
-						expect(res.customDisplayName).to.equal(re.body.customDisplayName);
-						expect(res.enabled).to.equal(re.body.enabled);
-						expect(res.locationId).to.equal(re.body.locationId);
-						arrayProperties.forEach( function (prop) {
-							expect(res).to.have.property(prop);
-						});
-						done();
-					});	
-			});
+			.del(token,endPoint2,function(err,resourceDel){
+				done();	
+			});	
 	});
 
-	it('Get /services/{:serviceId}/rooms/{:roomId}/resources',function(done){
-       roomManagerAPI
-         .get(enPointRes, function(err,res){ 
-           expect(res.status).to.equal(statusExpected);
-           expect(res.body[0]).to.have.property('_id');     
-           expect(idLastResource).to.equal(idResourceCreate);
-           done();
-         });
-    });
-    
-    it('Post /services/{:serviceId}/rooms/{:roomId}/resources', function(done){
-     
-       var jsonResource = roomResource.newResource;
-       jsonResource.resourceId = idResourceCreate;
-
-       roomManagerAPI
-          .post(token,enPointRes,jsonResource, function(err,res) {
-          	    size = res.body.resources.length;
-                idLastResource = res.body.resources[size-1]._id;                
-                arrayProperties.forEach( function (prop) {
-					expect(res.body).to.have.property(prop);
-			    });
-                expect(res.status).to.equal(statusExpected);
-                expect(idLastResource).to.equal(idResourceCreate);
-                done();
-          });
-      
-    });
 
 
+
+	it.only('GET /rooms/{roomId}/resources ,CRUD Get a resources associated to room',function(done){	
+		roomManagerAPI.get(endPoint,function(err,res){
+			mongoJson = { "displayName" : "Floor1Room1"}
+			mongodb.findDocument('rooms',mongoJson,function(doc){
+				expect(err).to.be.null;
+				expect(res.status).to.equal(config.httpStatus.Ok);
+				expect(res.body[0]).to.have.property("_id")
+				.and.be.equal(doc.resources[0]._id.toString());
+				/*
+				expect(res.body[0]).to.have.property("resourceId")
+				.and.be.equal(doc.resources[0].resourceId.toString());
+				expect(res.body[0]).to.have.property("quantity")
+				.and.be.equal(doc.resources[0].quantity);*/
+				//console.log(res.body[0]);
+				done();	
+			});	
+		});			  				  			 						
+	});	
+
+
+
+
+	it.skip('POST /rooms/{roomId}/resources ,CRUD Associate a resources associated to room',function(done){	
+			jsonToModify=roomJson.resources.roomsAsoc;
+			roomManagerAPI.post(token,endPoint,jsonToModify,function(err,res){
+				mongodb.findDocument('rooms',mongoJson,function(doc){	
+				expect(err).to.be.null;
+				expect(res.status).to.equal(config.httpStatus.Ok);
+				expect(res.body[0]).to.have.property("_id")
+				.and.be.equal(doc.resources[0]._id.toString());
+				expect(res.body[0]).to.have.property("resourceId")
+				.and.be.equal(doc.resources[0].resourceId.toString());
+				expect(res.body[0]).to.have.property("quantity")
+				.and.be.equal(doc.resources[0].quantity);
+				done();	
+			});	
+		});			  				  			 						
+	});	
+
+	it.skip('GET /rooms/{:roomId}/resources/{:roomResourceId}, CRUD get a specified resource of specified room',function(done){													
+		endPoint=endPoint+'/'+resourceAsoc.body.resources[0]._id;
+			roomManagerAPI.get(endPoint,function(err,res){
+			mongodb.findDocument('rooms',mongoJson,function(doc){
+				expect(err).to.be.null;
+				expect(res.status).to.equal(config.httpStatus.Ok);
+				expect(res.body[0]).to.have.property("_id")
+				.and.be.equal(doc.resources[0]._id.toString());
+				expect(res.body[0]).to.have.property("resourceId")
+				.and.be.equal(doc.resources[0].resourceId.toString());
+				expect(res.body[0]).to.have.property("quantity")
+				.and.be.equal(doc.resources[0].quantity);
+				done();
+			});
+		});	
+	});	
+
+	it.skip('PUT /rooms/{:roomId}/resources/{:roomResourceId},CRUD modify a specified resource of specified room',function(done){		
+		 jsonRoom=roomJson.roomQueries.resourcesUpdate;
+		 roomManagerAPI.put(token,endPoint,jsonRoom,function(err,resp){
+			mongodb.findDocument('rooms',mongoJson,function(doc){
+				expect(err).to.be.null;
+				expect(res.status).to.equal(config.httpStatus.Ok);
+				expect(res.body[0]).to.have.property("_id")
+				.and.be.equal(doc.resources[0]._id.toString());
+				expect(res.body[0]).to.have.property("resourceId")
+				.and.be.equal(doc.resources[0].resourceId.toString());
+				expect(res.body[0]).to.have.property("quantity")
+				.and.be.equal(doc.resources[0].quantity);
+				done();
+			});	
+		});
+	});	
+
+	it.skip('DELETE /rooms/{:roomId}/resources/{:roomResourceId},CRUD Delete a resource associate to room ',function(done){	
+		 roomManagerAPI.del(token,endPoint,function(err,resp){
+		 	mongodb.findDocument('rooms',mongoJson,function(doc){
+				expect(err).to.be.null;
+				expect(res.status).to.equal(config.httpStatus.Ok);
+				expect(res.body[0]).to.have.property("_id")
+				.and.be.equal(doc.resources[0]._id.toString());
+				expect(res.body[0]).to.have.property("resourceId")
+				.and.be.equal(doc.resources[0].resourceId.toString());
+				expect(res.body[0]).to.have.property("quantity")
+				.and.be.equal(doc.resources[0].quantity);
+				done();
+			});	
+		 });						
+	});	
+		
 });
+
