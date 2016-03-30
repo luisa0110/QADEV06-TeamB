@@ -11,8 +11,7 @@
 	"urlmongodb" : "mongodb://172.20.208.79:27017/roommanager", 
 	"timeOut" : 8000,
 	"userAccountJson" : {
-		"username": "JavierGutierrez",
->>>>>>> f336b91c6d51769e3d4c34eab828e87b7ce45658
+		"username": "AndresUzeda2",
 	  	"password": "Control123",
 	  	"authentication": "local"
 	},	
@@ -21,7 +20,7 @@
 	},
 	"path":{
 		"tokenAPI" : "/lib/tokenAPI",
-        "apk" : "/config/apk.json",
+                "apk" : "/config/apk.json",
 		"endPoints" : "/config/endPoints.json",
 		"resourceConfig" : "/config/resource.json",
 		"outOfOrder" : "/config/outOfOrder.json",
@@ -51,5 +50,4 @@
 		"password":"Control123",
 		"hostname":"sinergy.eng"
 	}
-
 }
