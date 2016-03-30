@@ -12,7 +12,6 @@
 		},
 	"authorization":"Authorization",
 	"jwt":"jwt ",
-	"postFilter":"?type=exchange",
 	"roomDisplayJson":
 			{
 				"displayName" : "Floor1Room99"
