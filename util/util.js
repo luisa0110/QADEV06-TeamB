@@ -154,7 +154,7 @@ exports.generateLocationJson = generateLocationJson;
 
 var getDate = function(num){
     var date = new Date();
-    var day = date.getDate() + num;
+    var day = date.getDate()+num;
     var month = date.getMonth()+1;
     var random = (Math.round(Math.random()*23))+1;
     if(random < 10){ random = '0'+ random }
@@ -183,8 +183,9 @@ var generatemeetingJson = function (num) {
     meetingsConfig.meetingJSon.location = meetingsConfig.meetingJSon.location.replace('[num]', num);
     meetingsConfig.meetingJSon.roomEmail = meetingsConfig.meetingJSon.roomEmail.replace('[num]', num);
     meetingsConfig.meetingJSon.resources = meetingsConfig.meetingJSon.resources[0].replace('[num]', num);
-    meetingsConfig.meetingJSon.start = getDate(0);
-    meetingsConfig.meetingJSon.end = getDate(1);
+    meetingsConfig.meetingJSon.end = getDate(1).substring(0,19);
+    meetingsConfig.meetingJSon.start = getDate(0).substring(0,19);
+    
     
     return meetingsConfig.meetingJSon;
 };
