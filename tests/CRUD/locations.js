@@ -1,15 +1,23 @@
 /**
  * CRUD locations by: Jose Antonio Cardozo
  */
-var init = require('../../init');
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
-var expect = require('chai').expect;
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var util = require(GLOBAL.initialDirectory+config.path.util);
-var locationConfig = require(GLOBAL.initialDirectory+config.path.locationConfig);
-var mongoDB = require(GLOBAL.initialDirectory+config.path.mongodb);
+
+var init 	= require('../../init');
+var expect 	= require('chai').expect;
+
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+
+var requireServices = new RequireServices();
+
+var config = requireServices.config();
+
+
+var tokenAPI 		= requireServices.tokenAPI();
+var endPoints 		= requireServices.endPoint();
+var roomManagerAPI 	= requireServices.roomManagerAPI();
+var util 			= requireServices.util();
+var locationConfig 	= requireServices.locationConfig();
+var mongoDB 		= requireServices.mongodb();
 
 var ObjectId = require('mongodb').ObjectID;
 
@@ -47,7 +55,7 @@ describe('CRUD of RoomManager', function (){
 					expect(arrayLocation.body[i]).to.have.property('customName');
 					expect(arrayLocation.body[i]).to.have.property('description');
 					expect(arrayLocation.body[i]).to.have.property('__v');	
-				};
+				}
 				mongoDB.findDocuments('locations',function (res) {
 						for (var i = 0; i < res.length; i++) {
 							expect(arrayLocation.body[i]._id).to.equal(res[i]._id.toString());
@@ -56,7 +64,7 @@ describe('CRUD of RoomManager', function (){
 							expect(arrayLocation.body[i].customName).to.equal(res[i].customName);
 							expect(arrayLocation.body[i].description).to.equal(res[i].description);
 							expect(arrayLocation.body[i].__v).to.equal(res[i].__v);
-						};
+						}
 						done();		
 					});
 			});
@@ -217,7 +225,7 @@ describe('CRUD of RoomManager', function (){
 			  			.findDocument('locations',locationJsonId,function (res) {
 			  				expect(res).to.not.exist;
 
-			  			})
+			  			});
 			  		done();
 			  });
 		});
