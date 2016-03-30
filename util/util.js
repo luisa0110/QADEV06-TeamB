@@ -86,7 +86,7 @@ var getDate = function(num){
 	if(num==0){aleatorio=23}
     var time = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+(date.getDate()+num)+'T'+aleatorio+':00:00.000Z';
 	return time;
-}
+};
 exports.getDate = getDate;
 
 var getCurrentDate = function(moreSeconds){
@@ -99,9 +99,9 @@ var getCurrentDate = function(moreSeconds){
         date.setSeconds(date.getSeconds()+moreSeconds);
         var currentPlus = date.toJSON();
         res.push(currentPlus);
-    };
+    }
     return res;
-}
+};
 exports.getCurrentDate = getCurrentDate;
 
 
@@ -169,7 +169,8 @@ var getDate = function(num){
     }
     var time = date.getFullYear() + '-' + (month) + '-' + (day) + 'T' + random + ':00:00.000Z';
     return time;
-}
+};
+
 exports.getDate = getDate;
 /**
  * This method generated a meeting with location, roomEmail, start date and end date specified
