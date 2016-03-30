@@ -1,14 +1,20 @@
 /**
  * CRUD of Attendees Route by: Jose Antonio Cardozo
  */
+//libs
+
 var init = require('../../init');
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
+
 var expect = require('chai').expect;
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var mongoDB = require(GLOBAL.initialDirectory+config.path.mongodb);
-var locationConfig = require(GLOBAL.initialDirectory+config.path.locationConfig);
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
+
+var config = requireServices.config();
+var tokenAPI = requireServices.tokenAPI();
+var endPoints = requireServices.endPoint();
+var roomManagerAPI = requireServices.roomManagerAPI();
+var mongoDB = requireServices.mongodb();
+var locationConfig = requireServices.locationConfig();
 
 var token = null;
 var endPointServices = config.url + endPoints.services;
@@ -41,15 +47,17 @@ describe('CRUD testing attendees route', function() {
 			  .get(endPointServicesById,function (err,res) {
 			 	 expect(res.status).to.equal(config.httpStatus.Ok);
 			 	 for (var i = 0; i < res.body.length; i++) {
-			 	 	expect(res.body[i]).to.have.property("username");
-			 	 	expect(res.body[i]).to.have.property("mail");
+			 	 	/*expect(res.body[i]).to.have.property("displayName");
+			 	 	expect(res.body[i]).to.have.property("mail");*/
 			 	 	var servicesAttend = res.body[i];
-			 	 	servicesId._id = ObjectId(servicesAttend._id);
+			 	 	//console.log(res.body[i]);
+			 	 	//console.log(res.body[i].displayName);
+			 	 	//servicesId._id = ObjectId(servicesAttend._id);
 
 			 	 mongoDB
 			 	 	.findDocument('services',servicesId,function (res) {
 			 	 		expect(res).to.not.be.null;
-			 	 		expect(servicesAttend.username).to.equal(res.body.username);
+			 	 		expect(servicesAttend.displayName).to.equal(res.body.displayName);
 			 	 		expect(servicesAttend.mail).to.equal(res.body.mail);
 			 	 	});
 			 	 };
