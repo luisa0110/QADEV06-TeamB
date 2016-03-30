@@ -1,22 +1,22 @@
 //Smoke TC Resources
 //Jean Carlo Rodriguez
 // the next line call the file init.js to declare a global var(GLOBAL.initialDirectory)
-var init = require('../../init');
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
-var expect = require('chai').expect;
-var requireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js');
+/*Modified by Maria Eloisa Alcocer Villarroel*/
+var init          = require('../../init.js');
+var expect        = require('chai').expect;
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
+var config        = requireServices.config();
+var serviceConfig = require(GLOBAL.initialDirectory+config.path.serviceConfig);
 
+var resourceConfig = requireServices.resourceConfig();
+var tokenAPI = requireServices.tokenAPI();
+var roomManagerAPI = requireServices.roomManagerAPI();
+var endPoints = requireServices.endPoint();
+var util = requireServices.util();
 
-var resourceConfig = requireServices.resourceConfig;
-var tokenAPI = requireServices.tokenAPI;
-var roomManagerAPI = requireServices.roomManagerAPI;
-var endPoints = requireServices.endPoints;
-var util = requireServices.util;
-//EndPoints
-var url = config.url;
-
-
-var resourceEndPoint = url+endPoints.resources;
+//endPoints
+var resourceEndPoint = requireServices.resourceEndPoint();
 
 // global variables
 var token = null; 
@@ -28,7 +28,7 @@ describe('Resources Smoke tests', function () {
 		process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 		//getting the token
 		tokenAPI
-			.getToken(function(err,res){
+			.getToken(function(err, res){
 				token = res.body.token;
 				done();
 			});
@@ -38,7 +38,7 @@ describe('Resources Smoke tests', function () {
 	it('Get /Resources', function (done) {
 		
 		roomManagerAPI
-			.get(resourceEndPoint,function(err,res){
+			.get(resourceEndPoint,function(err, res){
 				expect(res.status).to.equal(config.httpStatus.Ok);
 				done();
 			});
@@ -48,10 +48,10 @@ describe('Resources Smoke tests', function () {
 		var resourceId = null;
 		after(function (done) {
 			//delete the resource
-			if(resourceId!=null)
+			if(resourceId != null)
 			{
 				roomManagerAPI
-					.del(token,resourceEndPoint+'/'+resourceId,function(err,res){
+					.del(token,resourceEndPoint + '/' + resourceId,function(err, res){
 						resourceId = null;
 						done();
 					});
@@ -64,8 +64,8 @@ describe('Resources Smoke tests', function () {
 			
 			var resourceJSon = util.getRandomResourcesJson(resourceConfig.resourceNameSize);
 			roomManagerAPI
-				.post(token,resourceEndPoint,resourceJSon,function(err,res){
-					resourceId=res.body._id;
+				.post(token, resourceEndPoint,resourceJSon,function(err,res){
+					resourceId = res.body._id;
 					expect(res.status).to.equal(config.httpStatus.Ok);
 					done();
 				});
@@ -85,12 +85,13 @@ describe('Resources Smoke tests', function () {
 					done();
 				});
 		});
+		
 		afterEach(function (done) {
 			//delete the resource
 			if(resourceId!=null)
 			{
 				roomManagerAPI
-					.del(token,resourceEndPoint+'/'+resourceId,function(err,res){
+					.del(token, resourceEndPoint + '/' + resourceId,function(err, res){
 						resourceId = null;
 						done();
 					});
@@ -98,18 +99,20 @@ describe('Resources Smoke tests', function () {
 				console.log('the resourceID is null (after)');
 			}
 		});
+		
 		it('Get /resources/{id}', function (done) {
 
 			roomManagerAPI
-				.get(resourceEndPoint+'/'+resourceId,function(err,res){
+				.get(resourceEndPoint + '/' + resourceId, function(err, res){
 					expect(res.status).to.equal(config.httpStatus.Ok);
 					done();
 				});
 		});
+		
 		it('Put /resources/{id}', function (done) {
 			var resourcePutJSon = util.getRandomResourcesJson(resourceConfig.resourceNameSize);
 			roomManagerAPI
-				.put(token,resourceEndPoint+'/'+resourceId,resourcePutJSon,function(err,res){
+				.put(token,resourceEndPoint + '/' + resourceId, resourcePutJSon, function(err, res){
 					expect(res.status).to.equal(config.httpStatus.Ok);
 					done();
 				});
@@ -123,23 +126,24 @@ describe('Resources Smoke tests', function () {
 			//create a rosource
 			var resourceJSon = util.getRandomResourcesJson(resourceConfig.resourceNameSize);
 			roomManagerAPI
-				.post(token,resourceEndPoint,resourceJSon,function(err,res){
+				.post(token,resourceEndPoint,resourceJSon,function(err, res){
 					resourceId = res.body._id;
 					done();
 				});
 		});
+		
 		it('Delete /resources/{id}', function (done) {
 			roomManagerAPI
-				.del(token,resourceEndPoint+'/'+resourceId,function(err,res){
+				.del(token,resourceEndPoint + '/' + resourceId, function(err, res){
 					expect(res.status).to.equal(config.httpStatus.Ok);
 					done();
 				});
 		});
+		
+		/*This test case was added 03/26/2016*/
 		it('Delete /resources', function (done){
-		//var JsonId = {_id: '['+resourceId+']'};
 			roomManagerAPI
-				.delwithJson(token, resourceEndPoint, resourceId, function(err, res){
-					console.log(res.body+ 'BODY');
+				.delWithParam(token, resourceEndPoint, resourceId, function(err, res){
 					expect(res.status).to.equal(config.httpStatus.Ok);
 					done();
 				});
