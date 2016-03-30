@@ -26,6 +26,10 @@ var endPoint = config.url+endPoints.rooms;
 var endPoint2 = config.url+endPoints.resources;
 var jsonRoom = null;
 
+var expected = []; 
+var current = [];
+
+
 describe('Resource CRUD Suite get by id and put', function () {
 	this.timeout(config.timeOut);
 	process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -91,9 +95,10 @@ describe('Resource CRUD Suite get by id and put', function () {
 		jsonToModify.customDisplayName=util.generateString(10);
 		jsonToModify.code=util.generateString(5);
 		jsonToModify.__v=10;
+
 		roomManagerAPI.
 			put(token,endPoint,jsonToModify,function(err,res){
-				console.log('Json on the put TC '+JSON.stringify(roomJson.roomQueries.roomPut));
+				//console.log('Json on the put TC '+JSON.stringify(roomJson.roomQueries.roomPut));
 				jsonRoom={"customDisplayName":res.customDisplayName};
 				mongodb.findDocument('rooms',jsonRoom.customDisplayName,function(doc){	
 					expect(err).to.be.null;
@@ -128,8 +133,7 @@ describe('Rooms associated to Resources', function(done) {
 			.getToken(function(err,res){
 				token = res.body.token;
 				jsonRoom = roomJson.roomQueries.displayName;
-				console.log(jsonRoom);
-				console.log('...................');
+				
 				mongodb.findDocument('rooms',jsonRoom,function(doc){
 					room = doc;
 						jsonRoom = util.getRandomResourcesJson(resourceConfig.resourceNameSize);
@@ -141,7 +145,7 @@ describe('Rooms associated to Resources', function(done) {
 								roomManagerAPI.post
 									(token,endPoint,jsonRoom,function(err,resAsoc){
 									resourceAsoc = resAsoc;
-								console.log(doc);	
+								
 									done();
 								});									
 						});	
@@ -160,7 +164,7 @@ describe('Rooms associated to Resources', function(done) {
 
 
 
-	it.only('GET /rooms/{roomId}/resources ,CRUD Get a resources associated to room',function(done){	
+	it('GET /rooms/{roomId}/resources ,CRUD Get a resources associated to room',function(done){	
 		roomManagerAPI.get(endPoint,function(err,res){
 			mongoJson = { "displayName" : "Floor1Room1"}
 			mongodb.findDocument('rooms',mongoJson,function(doc){
@@ -168,38 +172,37 @@ describe('Rooms associated to Resources', function(done) {
 				expect(res.status).to.equal(config.httpStatus.Ok);
 				expect(res.body[0]).to.have.property("_id")
 				.and.be.equal(doc.resources[0]._id.toString());
-				/*
-				expect(res.body[0]).to.have.property("resourceId")
-				.and.be.equal(doc.resources[0].resourceId.toString());
-				expect(res.body[0]).to.have.property("quantity")
-				.and.be.equal(doc.resources[0].quantity);*/
-				//console.log(res.body[0]);
 				done();	
 			});	
 		});			  				  			 						
 	});	
 
 
-
-
-	it.skip('POST /rooms/{roomId}/resources ,CRUD Associate a resources associated to room',function(done){	
+	it('POST /rooms/{roomId}/resources ,CRUD Associate a resources associated to room',function(done){	
+    
 			jsonToModify=roomJson.resources.roomsAsoc;
-			roomManagerAPI.post(token,endPoint,jsonToModify,function(err,res){
-				mongodb.findDocument('rooms',mongoJson,function(doc){	
-				expect(err).to.be.null;
-				expect(res.status).to.equal(config.httpStatus.Ok);
-				expect(res.body[0]).to.have.property("_id")
-				.and.be.equal(doc.resources[0]._id.toString());
-				expect(res.body[0]).to.have.property("resourceId")
-				.and.be.equal(doc.resources[0].resourceId.toString());
-				expect(res.body[0]).to.have.property("quantity")
-				.and.be.equal(doc.resources[0].quantity);
-				done();	
+
+			mongoJson = { "displayName" : "Floor1Room1"}
+
+			roomManagerAPI.
+			      post(token,endPoint,jsonToModify, function(err,res){
+				   mongodb.
+				      findDocument('rooms',mongoJson, function(doc){
+					    expect(err).to.be.null;
+                		expect(res.body.resources[0]).to.have.property("_id")
+						.and.be.equal(doc.resources[0]._id.toString());
+						expect(res.status).to.equal(config.httpStatus.Ok);
+						//fixed the properties for assertions
+		                expect(res.body).to.have.property("_id");
+		                expect(res.body).to.have.property("enabled");
+		                expect(res.body).to.have.property("customDisplayName");
+		                expect(res.body.customDisplayName).to.equal(mongoJson.displayName);
+					done();	
 			});	
 		});			  				  			 						
 	});	
 
-	it.skip('GET /rooms/{:roomId}/resources/{:roomResourceId}, CRUD get a specified resource of specified room',function(done){													
+	it('GET /rooms/{:roomId}/resources/{:roomResourceId}, CRUD get a specified resource of specified room',function(done){													
 		endPoint=endPoint+'/'+resourceAsoc.body.resources[0]._id;
 			roomManagerAPI.get(endPoint,function(err,res){
 			mongodb.findDocument('rooms',mongoJson,function(doc){
@@ -216,7 +219,7 @@ describe('Rooms associated to Resources', function(done) {
 		});	
 	});	
 
-	it.skip('PUT /rooms/{:roomId}/resources/{:roomResourceId},CRUD modify a specified resource of specified room',function(done){		
+	it('PUT /rooms/{:roomId}/resources/{:roomResourceId},CRUD modify a specified resource of specified room',function(done){		
 		 jsonRoom=roomJson.roomQueries.resourcesUpdate;
 		 roomManagerAPI.put(token,endPoint,jsonRoom,function(err,resp){
 			mongodb.findDocument('rooms',mongoJson,function(doc){
@@ -233,7 +236,7 @@ describe('Rooms associated to Resources', function(done) {
 		});
 	});	
 
-	it.skip('DELETE /rooms/{:roomId}/resources/{:roomResourceId},CRUD Delete a resource associate to room ',function(done){	
+	it('DELETE /rooms/{:roomId}/resources/{:roomResourceId},CRUD Delete a resource associate to room ',function(done){	
 		 roomManagerAPI.del(token,endPoint,function(err,resp){
 		 	mongodb.findDocument('rooms',mongoJson,function(doc){
 				expect(err).to.be.null;
