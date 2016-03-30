@@ -1,3 +1,4 @@
+/*Modified by Maria Alcocer Villarroel*/
 var init          = require('../../init.js');
 var expect        = require('chai').expect;
 var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
@@ -20,9 +21,10 @@ var mongojs = serviceConfig.roomDisplayJson;
 //End Points
 var url = requireServices.url();
 var serviceEndPoint = requireServices.servicesEndPoint();
-var serviceEndPointFilter = serviceEndPoint + serviceConfig.postFilter;;
-var serviceTypes = requireServices.serviceTypes();
-//var service?Types = url+endPoints.service?Types;//TODO   
+var serviceType  = serviceConfig.service.type;
+var serviceTypes = requireServices.serviceTypes();   
+var serviceEndPointFilter = requireServices.service_Types().replace('{:serviceType}',serviceType);
+
 // global variables
 var existService = false;
 var token = null; 
@@ -33,8 +35,9 @@ var rooms = endPoints.rooms;
 //status for response 200
 var ok = config.httpStatus.Ok;
 
-describe('Smoke test for RoomManager ROOT', function(){
+describe('Smoke test for service', function(){
 	this.timeout(config.timeOut);
+	
 	before(function (done) {
 		process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 		//getting the token
@@ -44,6 +47,7 @@ describe('Smoke test for RoomManager ROOT', function(){
 				done();
 			});
 	});
+	
 	after('After to create tests',function(done)
 	{
 		token = null;
@@ -59,7 +63,8 @@ describe('Smoke test for RoomManager ROOT', function(){
 					{
 						roomManagerAPI
 							.post(token,serviceEndPointFilter,adminJson,function(err,resp){
-								idService=res.body._id;
+								idService = res.body._id;
+								serviceType = res.body.type;
 								existService = false;
 							done();
 							});
@@ -67,10 +72,12 @@ describe('Smoke test for RoomManager ROOT', function(){
 					else{
 						existService = true;
 						idService=res.body._id;
+						serviceType = res.body.type;
 						done();
 					} 
 			});
 		});
+		
 		after(function(done){
 			roomManagerAPI
 				.getwithToken(token,serviceEndPoint,function(err,res)
@@ -91,6 +98,7 @@ describe('Smoke test for RoomManager ROOT', function(){
 					 
 				});
 		});
+		
 		it('GET /servicesType SmokeTest, Verify the status 200',function(done)
 		{
 			roomManagerAPI
@@ -111,7 +119,10 @@ describe('Smoke test for RoomManager ROOT', function(){
 				});				
 		});
 		
+		/* This test case was added 03/26/2016*/
 		it('GET ?type=exchange SmokeTest, Verify the status 200', function(done){
+			serviceEndPointFilter = serviceEndPointFilter.replace('{:serviceType}',serviceType);
+			console.log(serviceEndPointFilter);
 			roomManagerAPI
 				.getwithToken(token, serviceEndPointFilter, function(err, res){
 					expect(res.status).to.equal(ok);
@@ -135,11 +146,13 @@ describe('Smoke test for RoomManager ROOT', function(){
 						});
 				});
 			});
+			
 			afterEach(function(done)
 			{
 				roomEndPoint = serviceEndPoint;
 				done();
 			});
+			
 			it('GET /services/ServiceID Smoke test, Verify the status 200 (GET method) by serviceID',function(done)
 			{
 				roomManagerAPI
@@ -149,6 +162,7 @@ describe('Smoke test for RoomManager ROOT', function(){
 						done();
 					});
 			});
+			
 			it('GET /services/serviceID/rooms smoke test, verify the status 200 after to require rooms',function(done)
 			{
 				roomManagerAPI
@@ -158,6 +172,7 @@ describe('Smoke test for RoomManager ROOT', function(){
 						done();
 					});
 			});
+			
 			it('GET /services/serviceID/rooms/roomID Smoke test, verify that the server returns the romm with IdRoom',function(done)
 			{
 				roomManagerAPI
@@ -167,6 +182,7 @@ describe('Smoke test for RoomManager ROOT', function(){
 						done();
 					});	
 			});
+			
 			it('PUT /services/serviceID/rooms/roomID Smoke test, verify that it is possible modify a room with method PUT',function(done)
 			{
 				roomManagerAPI
@@ -180,7 +196,7 @@ describe('Smoke test for RoomManager ROOT', function(){
 	});
 	
 
-	describe('DEL /service/serviceID',function()
+	describe('Method Delete service',function()
 	{
 		before(function(done)
 		{
@@ -215,7 +231,7 @@ describe('Smoke test for RoomManager ROOT', function(){
 			else {
 				done()};
 		});
-		it('DELETE /services Smoke Test, Verify the status 200 after to delete a service',function(done)
+		it('DELETE /services/{serviceId} Smoke Test, Verify the status 200 after to delete a service',function(done)
 		{
 			roomManagerAPI
 				.del(token, serviceEndPoint + '/' + idService, function(err, resp)
