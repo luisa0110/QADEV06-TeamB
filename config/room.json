@@ -26,7 +26,11 @@
            {
              "quantity": 1 
            }
-    }
+    },
+    "roomPost": {
+                "resourceId": "roomId",
+                 "quantity": 100
+                }
 }
 
 

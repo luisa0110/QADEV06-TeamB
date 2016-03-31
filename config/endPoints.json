@@ -10,7 +10,7 @@
 	"getOutOfOrder":"/services/{:serviceId}/rooms/{:roomId}/out-of-orders",
 	"getOutOfOrderbyService":"/services/{:serviceId}/rooms/{:roomId}/out-of-orders/{:outOfOrderId}",
 	"outOfOrderEndPoint":"/out-of-orders/{:outOfOrderId}",
-	"apk" : "/apk",
+	"apk" : "/admin/download/RoomManager.apk",
 	"publicKey" : "/public-key",
 	"services":"/services",
 	"locations":"/locations",
