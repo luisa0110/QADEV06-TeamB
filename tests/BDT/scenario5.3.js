@@ -3,16 +3,18 @@
 // the next line call the file init.js to declare a global var(GLOBAL.initialDirectory)
 var init = require('../../init');
 //with config it can use the methods located into the config file
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
+var config = requireServices.config();
 var expect = require('chai').expect;
 //with tokenAPI it can use the parameters located into the loginAPI file
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var endPoint = require(GLOBAL.initialDirectory+config.path.endPoints);
+var tokenAPI = requireServices.tokenAPI();
+var roomManagerAPI = requireServices.roomManagerAPI();
+var endPoint = requireServices.endPoint();
 var meetingConfig = require(GLOBAL.initialDirectory+config.path.meetingConfig);
 var locationConfig = require(GLOBAL.initialDirectory+config.path.locationConfig);
-var util = require(GLOBAL.initialDirectory+config.path.util);
-var mongodb= require(GLOBAL.initialDirectory+config.path.mongodb);
+var util = requireServices.util();
+var mongodb= requireServices.mongodb();
 var ObjectId = require('mongodb').ObjectId;
 //EndPoints
 var url = config.url;
