@@ -12,16 +12,19 @@ When the time is off for the meeting
 
 */
 var init = require('../../init');
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
+var config = requireServices.config();
 var resourceConfig = require(GLOBAL.initialDirectory+config.path.resourceConfig);
 var locationConfig = require(GLOBAL.initialDirectory+config.path.locationConfig);
 var expect = require('chai').expect;
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var util = require(GLOBAL.initialDirectory+config.path.util);
-var mongodb = require(GLOBAL.initialDirectory+config.path.mongodb);
+var tokenAPI = requireServices.tokenAPI();
+var roomManagerAPI = requireServices.roomManagerAPI();
+var endPoints = requireServices.endPoint();
+var util = requireServices.util();
+var mongodb = requireServices.mongodb();
 var ObjectId = require('mongodb').ObjectId;
+var meetingConfig = require(GLOBAL.initialDirectory+config.path.meetingConfig);
 //EndPoints
 var url = config.url;
 var resourceEndPoint = url+endPoints.resources;
@@ -89,32 +92,21 @@ describe('Scenario 7.1 – have a meeting with 15 seconds of duration and then t
 		describe('When a meeting with a duration of 15 seconds is asigned to the room',function () {
 			this.timeout(config.timeOut);
 			var meeting = null;
-			var meetingJSon = null;
+			var meetingJ2 = meetingConfig.meetingJSon;
 			var currentDatePlus = util.getCurrentDate(15) 
 			before(function (done) {
-				meetingJSon = {
-				    "organizer": "Ariel.Rojas",
-				    "title": "test",
-				    "start": "2015-10-29T01:20:00.000Z",
-				    "end": "2015-10-29T01:25:00.000Z",
-				    "location": "Floor1Room12",
-				    "roomEmail": "Floor1Room12@forest1.local",
-				    "resources": [
-				      "Floor1Room12@forest1.local"
-				    ],
-				    "attendees": [
-				      "test@myexchange.com"
-				    ]
-				};
+				meetingJ2.location = "Floor1Room5";
+				meetingJ2.roomEmail ="Floor1Room5@sinergy.eng";
+				meetingJ2.resources ="Floor1Room5@sinergy.eng";
+
 				//TODO resolve the problem whit the dates 
 				//console.log('---------------------------',meetingJSon);
-				
-				meetingJSon.start = currentDatePlus[0];
-				meetingJSon.end = currentDatePlus[1];
+				meetingJ2.start = currentDatePlus[0];
+				meetingJ2.end = currentDatePlus[1];
 				//console.log('---------------------------',meetingJSon);
 				
 				roomManagerAPI
-					.postwithBasic(basic, servicesEndPoint + '/' + roomJson.serviceId + '/' + rooms + '/' + roomJson._id + '/' + meetings, meetingJSon, function(err, res){
+					.postwithBasic(basic, servicesEndPoint + '/' + roomJson.serviceId + '/' + rooms + '/' + roomJson._id + '/' + meetings, meetingJ2, function(err, res){
 						//console.log('//////////////////////'+JSON.stringify(res.body));
 						meeting= res.body;
 						done()
