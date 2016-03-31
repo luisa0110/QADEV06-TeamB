@@ -129,8 +129,7 @@ describe('Smoke testings for meetings : GET, PUT and DELETE methods by meeting I
 		var num = displayName.substring(10);
 		var meetingPutJSon = util.generatemeetingJson(num);
 		meetingPutJSon._id = roomId;
-		meetingPutJSon.resources = ['Floor1Room1@sinergy.eng']
-		//meetingPutJSon.optionalAttendees = [];
+		meetingPutJSon.resources = ['Floor1Room1@sinergy.eng'];
 		roomManagerAPI
 			.putwithBasic(basic, servicesEndPoint + '/' + serviceId + '/' + rooms + '/' + roomId + '/' + meetings + '/' + meetingId, meetingPutJSon, function(err, res){
 				expect(res.status).to.equal(config.httpStatus.Ok);
