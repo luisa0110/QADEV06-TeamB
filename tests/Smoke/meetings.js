@@ -3,15 +3,17 @@
 // the next line call the file init.js to declare a global var(GLOBAL.initialDirectory)
 var init = require('../../init');
 //with config it can use the methods located into the config file
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
 var expect = require('chai').expect;
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
 //with tokenAPI it can use the parameters located into the loginAPI file
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var endPoint = require(GLOBAL.initialDirectory+config.path.endPoints);
+var config = requireServices.config();
+var tokenAPI = requireServices.tokenAPI();
+var roomManagerAPI = requireServices.roomManagerAPI();
+var endPoint = requireServices.endPoint();
 var meetingConfig = require(GLOBAL.initialDirectory+config.path.meetingConfig);
-var util = require(GLOBAL.initialDirectory+config.path.util);
-var mongodb= require(GLOBAL.initialDirectory+config.path.mongodb);
+var util = requireServices.util();
+var mongodb= requireServices.mongodb();
 //EndPoints
 var url = config.url;
 var meetingsEndPoint = url + endPoint.meetings;
@@ -73,6 +75,7 @@ describe('Smoke testings for meetings : POST Method', function () {
 			});
 	});
 
+
 	after('Deleting the meeting', function (done) {
 		roomManagerAPI
 			.delwithBasic(basic, servicesEndPoint + '/' + serviceId + '/' + rooms + '/' + roomId + '/' + meetings + '/' + meetingId, function(err, res){
@@ -84,7 +87,7 @@ describe('Smoke testings for meetings : POST Method', function () {
 		var num = displayName.substring(10);
 		var meetingJSon = util.generatemeetingJson(num);
 		roomManagerAPI
-			.postwithBasic(basic, servicesEndPoint + '/' + serviceId + '/' + rooms + '/' + roomId + '/' + meetings, meetingJSon, function(err, res){
+			.postwithBasic(basic, servicesEndPoint + '/' + serviceId + rooms  + '/' +roomId  + meetings, meetingJSon,function(err, res){
 				meetingId = res.body._id;
 				expect(res.status).to.equal(config.httpStatus.Ok);
 				done();
@@ -125,6 +128,7 @@ describe('Smoke testings for meetings : GET, PUT and DELETE methods by meeting I
 	it('PUT /services/{:serviceId}/rooms/{:roomId}/meetings/{:meetingId} returns 200', function (done){	
 		var num = displayName.substring(10);
 		var meetingPutJSon = util.generatemeetingJson(num);
+		meetingPutJSon.resources = ['Floor1Room1@sinergy.eng'];
 		roomManagerAPI
 			.putwithBasic(basic, servicesEndPoint + '/' + serviceId + '/' + rooms + '/' + roomId + '/' + meetings + '/' + meetingId, meetingPutJSon, function(err, res){
 				expect(res.status).to.equal(config.httpStatus.Ok);
