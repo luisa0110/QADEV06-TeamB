@@ -1,25 +1,25 @@
 {
   "meetingJSon" : {
-    "organizer": "Ariel.Rojas",
+    "organizer": "JavierGutierrez",
     "title": "test",
     "start": "InitDate",
     "end": "FinishDate",
     "location": "Floor1Room[num]",
-    "roomEmail": "Floor1Room[num]@forest1.local",
+    "roomEmail": "Floor1Room[num]@sinergy.eng",
     "resources": [
-      "Floor1Room[num]@forest1.local"
+      "Floor1Room[num]@sinergy.eng"
     ],
     "attendees": [
-      "test@myexchange.com"
+      "JavierGutierrez@sinergy.eng"
     ]
   },
-  "displayName":{"displayName": "Floor1Room30"},
-  "displayNameRoom":{"displayName": "Floor1Room83"},
-  "startMeeting":"2015-11-29T11:25:00.000Z",
-  "endMeeting": "2015-11-29T11:35:00.000Z",
-  "startMeeting2":"2015-11-29T12:00:00.000Z",
-  "endMeeting2":"2015-11-29T12:10:00.000Z",
-  "startMeeting3":"2015-11-29T12:20:00.000Z",
-  "endMeeting3":"2015-11-29T12:30:00.000Z",
+  "displayName":{"displayName": "Floor1Room1"},
+  "displayNameRoom":{"displayName": "Floor1Room1"},
+  "startMeeting":"2016-11-29T11:25:00.000Z",
+  "endMeeting": "2016-11-29T11:35:00.000Z",
+  "startMeeting2":"2016-11-29T12:00:00.000Z",
+  "endMeeting2":"2016-11-29T12:10:00.000Z",
+  "startMeeting3":"2016-11-29T12:20:00.000Z",
+  "endMeeting3":"2016-11-29T12:30:00.000Z",
   "locationId":{"locationId":"null"}
 }
