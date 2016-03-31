@@ -31,7 +31,7 @@ var token,idService,idRoom,idResourceCreate,
 
 var statusExpected = config.httpStatus.Ok;
 
-xdescribe('Smoke test for RoomManager',function()
+describe('Smoke test for RoomManager',function()
 {
 	this.timeout(config.timeOut);
 	before(function (done) {
