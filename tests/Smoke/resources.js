@@ -20,6 +20,7 @@ var resourceEndPoint = requireServices.resourceEndPoint();
 
 // global variables
 var token = null; 
+var resourceId = null;
 
 describe('Resources Smoke tests', function () {
 	this.timeout(config.timeOut);
@@ -35,17 +36,10 @@ describe('Resources Smoke tests', function () {
 	});
 	
 
-	it('Get /Resources', function (done) {
-		
-		roomManagerAPI
-			.get(resourceEndPoint,function(err, res){
-				expect(res.status).to.equal(config.httpStatus.Ok);
-				done();
-			});
-	});
+	
 
 	describe('set of tests that is need to after delete a resource', function () {
-		var resourceId = null;
+		
 		after(function (done) {
 			//delete the resource
 			if(resourceId != null)
@@ -74,7 +68,6 @@ describe('Resources Smoke tests', function () {
 	
 
 	describe('set of tests that is need to before create and after delete a resource', function () {
-		var resourceId = null;
 		
 		beforeEach(function (done) {
 			//create a resource
@@ -96,8 +89,17 @@ describe('Resources Smoke tests', function () {
 						done();
 					});
 			}else{
+				
 				console.log('the resourceID is null (after)');
 			}
+		});
+		
+		it('Get /Resources', function (done) {
+			roomManagerAPI
+				.get(resourceEndPoint,function(err, res){
+					expect(res.status).to.equal(config.httpStatus.Ok);
+					done();
+				});
 		});
 		
 		it('Get /resources/{id}', function (done) {
@@ -120,7 +122,6 @@ describe('Resources Smoke tests', function () {
 	});
 
 	describe('set of tests that is need to before create a resource', function () {
-		var resourceId = null;
 		
 		beforeEach(function (done) {
 			//create a rosource
