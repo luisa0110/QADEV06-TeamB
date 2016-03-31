@@ -137,6 +137,8 @@ describe('CRUD testings for meetings : GET method (all meetings), GET, PUT and D
 		roomManagerAPI
 			.get(servicesEndPoint + '/' + serviceId + '/' + rooms + '/' + roomId + '/' + meetings, function(err, res){
 				expect(res.status).to.equal(config.httpStatus.Ok);
+				//console.log(res.body[0]);
+				//console.log(meeting);
 				expect(res.body[0]).to.have.property("serviceId");
 				expect(res.body[0].serviceId).to.equal(meeting.serviceId);
 				expect(res.body[0]).to.have.property("roomId");
@@ -203,9 +205,11 @@ describe('CRUD testings for meetings : GET method (all meetings), GET, PUT and D
 			});
 	});
 
-	it.skip('PUT /services/{:serviceId}/rooms/{:roomId}/meetings/{:meetingId}', function (done){	
+	it('PUT /services/{:serviceId}/rooms/{:roomId}/meetings/{:meetingId}', function (done){	
 		var num = displayName.substring(10);
 		var meetingPutJSon = util.generatemeetingJson(num);
+		meetingPutJSon._id = roomId;
+		meetingPutJSon.resources = ['Floor1Room1@sinergy.eng'];
 		roomManagerAPI
 			.putwithBasic(basic, servicesEndPoint + '/' + serviceId + '/' + rooms + '/' + roomId + '/' + meetings + '/' + meetingId, meetingPutJSon, function(err, res){
 				var json = {"_id" : ObjectId(res.body._id)}
