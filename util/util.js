@@ -186,8 +186,7 @@ var generatemeetingJson = function (num) {
     meetingsConfig.meetingJSon.end = getDate(1).substring(0,19);
     meetingsConfig.meetingJSon.start = getDate(0).substring(0,19);
     meetingsConfig.meetingJSon.optionalAttendees = [];
-    
-    
+ 
     return meetingsConfig.meetingJSon;
 };
 exports.generatemeetingJson = generatemeetingJson;
