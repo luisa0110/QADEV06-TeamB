@@ -68,7 +68,7 @@ exports.getResourcesJson = getResourcesJson;
 		outOfOrderConfig.outOfOrderJson.from = from;
 		outOfOrderConfig.outOfOrderJson.to = to;
 		outOfOrderConfig.outOfOrderJson.title = generateString(outOfOrderConfig.titleSize);
-		outOfOrder = outOfOrderConfig.outOfOrderJson
+		outOfOrder = outOfOrderConfig.outOfOrderJson;
 		return 	outOfOrder;
 
 };
@@ -86,7 +86,7 @@ var getDate = function(num){
 	if(num==0){aleatorio=23}
     var time = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+(date.getDate()+num)+'T'+aleatorio+':00:00.000Z';
 	return time;
-}
+};
 exports.getDate = getDate;
 
 var getCurrentDate = function(moreSeconds){
@@ -99,9 +99,9 @@ var getCurrentDate = function(moreSeconds){
         date.setSeconds(date.getSeconds()+moreSeconds);
         var currentPlus = date.toJSON();
         res.push(currentPlus);
-    };
+    }
     return res;
-}
+};
 exports.getCurrentDate = getCurrentDate;
 
 
@@ -154,18 +154,23 @@ exports.generateLocationJson = generateLocationJson;
 
 var getDate = function(num){
     var date = new Date();
-    var day = date.getDate() + num;
+    var day = date.getDate()+num;
     var month = date.getMonth()+1;
-    var aleatorio = (Math.round(Math.random()*23))+1;
-    if(aleatorio < 10){ aleatorio = '0'+ aleatorio }
-    if(num == 0){aleatorio = 23}
+    var random = (Math.round(Math.random()*23))+1;
+    if(random < 10){ random = '0'+ random }
+    if(num == 0){random = 23}
          if(day > 31){
             month = date.getMonth()+2;
             day = '0' + (1 + num);
          }
-    var time = date.getFullYear() + '-' + (month) + '-' + (day) + 'T' + aleatorio + ':00:00.000Z';
+    if(month < 10)
+    {
+        month = '0' + month;
+    }
+    var time = date.getFullYear() + '-' + (month) + '-' + (day) + 'T' + random + ':00:00.000Z';
     return time;
-}
+};
+
 exports.getDate = getDate;
 /**
  * This method generated a meeting with location, roomEmail, start date and end date specified
@@ -178,8 +183,9 @@ var generatemeetingJson = function (num) {
     meetingsConfig.meetingJSon.location = meetingsConfig.meetingJSon.location.replace('[num]', num);
     meetingsConfig.meetingJSon.roomEmail = meetingsConfig.meetingJSon.roomEmail.replace('[num]', num);
     meetingsConfig.meetingJSon.resources = meetingsConfig.meetingJSon.resources[0].replace('[num]', num);
-    meetingsConfig.meetingJSon.start = getDate(0);
-    meetingsConfig.meetingJSon.end = getDate(1);
+    meetingsConfig.meetingJSon.end = getDate(1).substring(0,19);
+    meetingsConfig.meetingJSon.start = getDate(0).substring(0,19);
+    
     
     return meetingsConfig.meetingJSon;
 };
