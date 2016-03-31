@@ -1,5 +1,3 @@
-//CRUD of roomResources
-
 var init            = require('../../init');
 
 var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
@@ -46,11 +44,11 @@ describe('CRUD test for RoomResources',function(){
 	before(function (done) {
 				
 		process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-		
+		//getting the token
 		tokenAPI
 			.getToken(function(err,res){
 				token = res.body.token;	
-				
+				//getting serviceID
 				roomManagerAPI
 					.getwithToken(token, servicesEndPoint, function(err, resp){
 						idService = resp.body[0]._id;
@@ -104,7 +102,7 @@ describe('CRUD test for RoomResources',function(){
 	afterEach(function (done) {
 		//delete resource create
 		roomManagerAPI
-			.del(token, +'/'+idResourceCreate,function(err,res){
+			.del(token, + '/' + idResourceCreate,function(err,res){
 				done();
 			});	
 	});
@@ -207,7 +205,8 @@ describe('CRUD test for RoomResources',function(){
                 expect(idLastResource).to.equal(idResourceCreate);
                 done();
           });
+      
     });
+
+
 });
-
-
