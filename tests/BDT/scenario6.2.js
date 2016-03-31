@@ -6,14 +6,16 @@
 * Then delete the parent location
 */
 var init = require('../../init');
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
+var config = requireServices.config();
 var expect = require('chai').expect;
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var mongoDB = require(GLOBAL.initialDirectory+config.path.mongodb);
+var tokenAPI = requireServices.tokenAPI();
+var endPoints = requireServices.endPoint();
+var roomManagerAPI = requireServices.roomManagerAPI();
+var mongoDB = requireServices.mongodb();
 var roomJson = require(GLOBAL.initialDirectory+config.path.room);
-var util = require(GLOBAL.initialDirectory+config.path.util);
+var util = requireServices.util();
 var locationConfig = require(GLOBAL.initialDirectory+config.path.locationConfig);
 var resourceConfig = require(GLOBAL.initialDirectory+config.path.resourceConfig);
 var meetingConfig = require(GLOBAL.initialDirectory+config.path.meetingConfig);
