@@ -24,10 +24,10 @@ describe('APK Routers', function () {
 	});	
 
 	it('GET /apk refactor', function(done) {
+		console.log(apkEndPoint);
 		roomManagerAPI
-			.get(apkEndPoint, function(err, res){							
+			.get(apkEndPoint, function(err, res){	
 				expect(res.status).to.equal(config.httpStatus.Ok);
-
 				done();
 			});
 	});
