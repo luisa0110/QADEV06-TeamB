@@ -14,7 +14,6 @@ var util			 = requireServices.util();
 var getEndPoint		 = requireServices.endPoint();
 var mongodb			 = requireServices.mongodb();
 var ObjectId 		 = require('mongodb').ObjectID;
-var outOfOrderConfig = requireServices.outOfOrder();
 var roomJson 		 = requireServices.room();
 
 /* End Points*/  
@@ -27,6 +26,7 @@ var timeout						= config.timeOut;
 var endPointOutOfOrder  = null;
 var room 				= null;
 var token 				= null;
+var outOrderId 			= null;
 
 describe('Smoke test about out of order', function () {
     this.timeout(timeout);
@@ -67,6 +67,7 @@ describe('Smoke test about out of order', function () {
 			beforeEach('before create the out of order',function(done) {
 				roomManagerAPI
 					.post(token, endPointOutOfOrder, util.generateOutOforderJson(room._id, util.getDate(0), util.getDate(1)), function(err, res){
+						outOrderId = res.body._id;
 						done();
 					});	
 			});	
@@ -77,14 +78,13 @@ describe('Smoke test about out of order', function () {
 			 * @res: an endpoint with the roomId
 			 */	  
 			beforeEach('Before get endpoint with the roomId', function(done) {
-
-				roomManagerAPI.get(endPointOutOfOrder,function(err, res){
-					outOrderId = res.body[0]._id;
-					endPoint1 = util.stringReplace(outOfOrderbyServiceEndPoint, config.nameId.serviceId, room.serviceId);
-					endPoint2 = util.stringReplace(endPoint1, config.nameId.roomId, room._id);
-					endPoint = util.stringReplace(endPoint2, config.nameId.outOfOrderId, outOrderId);
-					done();		
-				});			
+				roomManagerAPI
+					.get(endPointOutOfOrder,function(err, res){
+						endPoint1 = util.stringReplace(outOfOrderbyServiceEndPoint, config.nameId.serviceId, room.serviceId);
+						endPoint2 = util.stringReplace(endPoint1, config.nameId.roomId, room._id);
+						endPoint = util.stringReplace(endPoint2, config.nameId.outOfOrderId, outOrderId);
+						done();
+					});
 			});
 		    
 			/**
@@ -103,8 +103,7 @@ describe('Smoke test about out of order', function () {
 						.get(endPointOutOfOrder, function(err, res){
 							expect(res.status).to.equal(config.httpStatus.Ok);
 							done();
-						});			
-					
+						});
 			});			
 		
 
@@ -141,7 +140,6 @@ describe('Smoke test about out of order', function () {
 		});
 		describe('set of tests with use roomId, serviceId and out-of-orderId for rooms out of orders', function () {
 
-
 			it('GET//services/{:serviceId}/rooms/{:roomId}/out-of-orders/{:out-of-orderId}', function(done) {
 				roomManagerAPI
 					.get(endPoint, function(err, res){
@@ -156,9 +154,7 @@ describe('Smoke test about out of order', function () {
 						done();
 					});					
 			});
-
 		});
-
 	});
 
 	describe('Smoke test of Post about out of order', function () {
@@ -167,7 +163,7 @@ describe('Smoke test about out of order', function () {
 		 * @description: Pre condition to execute the set Test Cases.
 		 * delete an out of order in a room spesific by ID
 		 */	  	
-		after('after delete the out of order',function(done) {
+		after('after delete the out of order', function(done) {
 			roomManagerAPI
 				.del(token, endPoint, function(err, res){
 					done();
