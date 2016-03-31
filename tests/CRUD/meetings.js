@@ -3,15 +3,17 @@
 // the next line call the file init.js to declare a global var(GLOBAL.initialDirectory)
 var init = require('../../init');
 //with config it can use the methods located into the config file
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
 var expect = require('chai').expect;
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
+var config = requireServices.config();
 //with tokenAPI it can use the parameters located into the loginAPI file
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var endPoint = require(GLOBAL.initialDirectory+config.path.endPoints);
+var tokenAPI = requireServices.tokenAPI();
+var roomManagerAPI = requireServices.roomManagerAPI();
+var endPoint = requireServices.endPoint();
 var meetingConfig = require(GLOBAL.initialDirectory+config.path.meetingConfig);
-var util = require(GLOBAL.initialDirectory+config.path.util);
-var mongodb= require(GLOBAL.initialDirectory+config.path.mongodb);
+var util = requireServices.util();
+var mongodb= requireServices.mongodb();
 var ObjectId = require('mongodb').ObjectId;
 //EndPoints
 var url = config.url;
@@ -201,7 +203,7 @@ describe('CRUD testings for meetings : GET method (all meetings), GET, PUT and D
 			});
 	});
 
-	it('PUT /services/{:serviceId}/rooms/{:roomId}/meetings/{:meetingId}', function (done){	
+	it.skip('PUT /services/{:serviceId}/rooms/{:roomId}/meetings/{:meetingId}', function (done){	
 		var num = displayName.substring(10);
 		var meetingPutJSon = util.generatemeetingJson(num);
 		roomManagerAPI
