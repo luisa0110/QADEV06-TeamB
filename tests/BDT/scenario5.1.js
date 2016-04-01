@@ -1,6 +1,6 @@
 var init = require('../../init');
 var expect = require('chai').expect;
-//with config it can use the methods located into the config file
+
 var RequireServices = require(GLOBAL.initialDirectory + '/lib/req-serv.js').RequireServices;
 var requireServices = new RequireServices();
 
@@ -74,18 +74,27 @@ describe('meetings', function () {
 				console.log('\t\tAnd one meeting assigned at the Room');
 				var num = displayName.substring(10);
 				var meetingJSon = util.generatemeetingJson(num);
-				meetingJSon.start = meetingConfig.startMeeting;
-				meetingJSon.end = meetingConfig.endMeeting;
-				roomManagerAPI
-					.postwithBasic(basic, servicesEndPoint + '/' + serviceId + '/' + rooms + '/' + roomId + '/' + meetings, meetingJSon, function(err, res){
-						meetingId1 = res.body._id;
-						done();
-					});
+				var _endPoint;
+					meetingJSon.start = meetingConfig.startMeeting.substring(0,19);
+					meetingJSon.end = meetingConfig.endMeeting.substring(0,19);
+                   
+                    _endPoint = servicesEndPoint + '/' + 
+                                serviceId + rooms + '/' + 
+                                roomId + meetings;
+
+						roomManagerAPI
+							.postwithBasic(basic,_endPoint, meetingJSon, function(err, res){
+
+								meetingId1 = res.body._id;
+								
+								done();
+							});
 			});
 
 			after('Deleting The location, resources and meeting', function (done) {
+
 				roomManagerAPI
-					.del(token,endPointLocationById,function (err,res) {
+					.del(token,endPointLocationById, function (err,res) {
 						roomManagerAPI
 							.delwithBasic(basic, servicesEndPoint + '/' + serviceId + '/' + rooms + '/' + roomId + '/' + meetings + '/' + meetingId1, function(err, res){
 								meetingId1 = null;
