@@ -1,43 +1,47 @@
 //scenario2.1.js
 //by Miguel Angel Terceros Caballero
-var init = require('../../init');
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
-var expect = require('chai').expect;
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var util = require(GLOBAL.initialDirectory+config.path.util);
-var mongodb = require(GLOBAL.initialDirectory+config.path.mongodb);
-var roomTest = require(GLOBAL.initialDirectory+config.path.room);
-var locationConfig = require(GLOBAL.initialDirectory+config.path.locationConfig);
-var resourceConfig = require(GLOBAL.initialDirectory+config.path.resourceConfig);
-var meetingConfig = require(GLOBAL.initialDirectory+config.path.meetingConfig);
+var init 	= require('../../init');
+var expect 	= require('chai').expect;
+
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
+
+var config 			= requireServices.config();
+var tokenAPI 		= requireServices.tokenAPI();
+var roomManagerAPI 	= requireServices.roomManagerAPI();
+var endPoints 		= requireServices.endPoint();
+var util 			= requireServices.util();
+var mongodb		 	= requireServices.mongodb();
+var roomTest 		= requireServices.room();
+var locationConfig 	= requireServices.locationConfig();
+var resourceConfig 	= requireServices.resourceConfig();
+var meetingConfig 	= requireServices.meetingConfig();
 //End Points
-var url = config.url;
-var servicesEndPoint = url + endPoints.services;
-var roomsEndPoint = url + endPoints.rooms;
-var resourceEndPoint = url + endPoints.resources;
-var locationsEndPoint = url + endPoints.locations;
+var url				 	  = config.url;
+var servicesEndPoint 	  = url + endPoints.services;
+var roomsEndPoint 		  = url + endPoints.rooms;
+var resourceEndPoint 	  = url + endPoints.resources;
+var locationsEndPoint 	  = url + endPoints.locations;
 var locationsEndPointByID = url + endPoints.locationById;
-var meetingsEndPoint = url + endPoints.meetings;
-var servicesEndPoint = url + endPoints.services;
+var meetingsEndPoint 	  = url + endPoints.meetings;
 //end points netos
 var resources = endPoints.resources;
-var rooms = endPoints.rooms;
+var rooms 	  = endPoints.rooms;
 var locations = endPoints.locations;
-var meetings = endPoints.meetings;
-var basic = config.userBasicAccountJson;
+var meetings  = endPoints.meetings;
+var basic 	  = config.userBasicAccountJson;
+var timeout	  = config.timeOut;
 // declare variables
-var size = locationConfig.size;
-var idRoom = null;
-var idService = null;
-var idResource = null;
-var idLocation = null;
-var idLocation2 = null;
+var size 			= locationConfig.size;
+var idRoom 			= null;
+var idService 		= null;
+var idResource 		= null;
+var idLocation 		= null;
+var idLocation2 	= null;
 var idOtherLocation = null;
-var idMeeting = null;
-var token = null;
-var roomName = null;
+var idMeeting 		= null;
+var token 			= null;
+var roomName 		= null;
 
 /*
 Locations
@@ -51,7 +55,7 @@ Locations
 			Then ensure that is possible change the location of a meeting to other location
  */
 describe('Scenario 2.1 – We have a meeting in a room with a determinate location that is change', function () {
-	this.timeout(config.timeOut);
+	this.timeout(timeout);
 	process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 	context('Given I have a Room specified',function(){
@@ -66,6 +70,7 @@ describe('Scenario 2.1 – We have a meeting in a room with a determinate locati
 
 		before('room',function (done) {
 			roomJSON = meetingConfig.displayName;
+			console.log(roomJSON);
 			mongodb
 				.findDocument('rooms',roomJSON, function(res){
 					idRoom = res._id;

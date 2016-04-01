@@ -122,7 +122,6 @@ describe('Smoke test for service', function(){
 		/* This test case was added 03/26/2016*/
 		it('GET ?type=exchange SmokeTest, Verify the status 200', function(done){
 			serviceEndPointFilter = serviceEndPointFilter.replace('{:serviceType}',serviceType);
-			console.log(serviceEndPointFilter);
 			roomManagerAPI
 				.getwithToken(token, serviceEndPointFilter, function(err, res){
 					expect(res.status).to.equal(ok);
