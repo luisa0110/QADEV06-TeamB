@@ -4,5 +4,6 @@
   "meetingsAPI" : "/lib/meetingsAPI",
   "mongodb" : "/lib/mongodb",
   "util" : "/util/util",
+  "compareResults" : "/util/compareResults",
   "roomManagerAPI" : "/lib/roomManagerAPI"
 }
