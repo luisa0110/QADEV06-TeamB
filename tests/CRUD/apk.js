@@ -4,9 +4,13 @@
 var expect = require('chai').expect;
 //import libraries
 var init = require('../../init');
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
+
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
+
+var config = requireServices.config();
+var endPoints = requireServices.endPoint();
+var roomManagerAPI = requireServices.roomManagerAPI();
 var apk = require(GLOBAL.initialDirectory+config.path.apk);
 
 //url 
