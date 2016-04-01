@@ -103,26 +103,6 @@ describe('Smoke Testing for Room routes', function() {
 				done();
 			});
 	});
-	/**/
-	/*it('POST /rooms/{roomId}/meetings, Verify the status 200',function(done){	
-		var jsonMeeting = {
-			"organizer":"Andres1",
-			"title":"pollo",
-			"start":"2016-04-28T02:21:00.000Z",
-			"end":"2016-04-28T03:51:00.000Z",
-			"location":"Floor1Room1",
-			"roomEmail":"Floor1Room1@sinergy.eng",
-			"resources":["Floor1Room1@sinergy.eng"],
-			"attendees":["Andres1@sinergy.eng"],
-			"optionalAttendees":[]
-		};
-		console.log(endPoint);
-		roomManagerAPI.
-			post(token,endPoint,jsonMeeting,function(err,res){
-				expect(res.status).to.equal(config.httpStatus.Ok);
-				done();
-			});	
-	});*/
 
 });
 
@@ -166,23 +146,29 @@ describe('Smoke Testing for Room Resources routes ', function() {
 				done();	
 			});	
 	});
-
-
+/**
+ * Smoke Test to the service room with the method get the
+ * resources of the all rooms 
+ */
 	it('GET /rooms/{roomId}/resources,Verify the status 200',function(done){	
 			roomManagerAPI.get(endPoint,function(err,res){
 				expect(res.status).to.equal(statusExpected);
 				done();
 			});			  				  			 						
 	});	
-
-
+/**
+ * Smoke Test to the service room with the method post for creates the
+ * resources in the room 
+ */
 	it('POST rooms/{:roomId}/resources, Verify the status 200',function(done){		
 		expect(resourceAsoc.status).to.equal(statusExpected);
   		done();
 	});
 
-
-
+/**
+ * Smoke Test to the service room with the method get for read the
+ * display resources of the room 
+ */
 	it('GET /rooms/{:roomId}/resources/{:roomResourceId}, Verify the status 200',function(done){													
 			endPoint = endPoint + '/' + resourceAsoc.body.resources[0]._id;
 			roomManagerAPI.get(endPoint,function(err,res){
