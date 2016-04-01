@@ -4,7 +4,7 @@ var expect        = require('chai').expect;
 var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
 var requireServices = new RequireServices();
 var config        = requireServices.config();
-var serviceConfig = require(GLOBAL.initialDirectory+config.path.serviceConfig);
+var serviceConfig = requireServices.serviceConfig();
 
 var tokenAPI = requireServices.tokenAPI();
 var roomManagerAPI = requireServices.roomManagerAPI();
@@ -121,7 +121,6 @@ describe('Smoke test for service', function(){
 		
 		/* This test case was added 03/26/2016*/
 		it('GET ?type=exchange SmokeTest, Verify the status 200', function(done){
-			serviceEndPointFilter = serviceEndPointFilter.replace('{:serviceType}',serviceType);
 			roomManagerAPI
 				.getwithToken(token, serviceEndPointFilter, function(err, res){
 					expect(res.status).to.equal(ok);

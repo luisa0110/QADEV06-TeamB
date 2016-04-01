@@ -11,7 +11,10 @@ var properties = '';
 var selectProperties = function(service){
 	
 	switch(service) {
-		case 'services':
+		case 'servicesType':{
+			var properties = requireServices.serviceConfig().typeServProperties;
+			return properties;
+		}
 			/////serviceprperties
 			break;
 		case 'resourcemodels':{

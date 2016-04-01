@@ -53,5 +53,8 @@
 	"RoomDisablejson":
 	{
 		"enabled":"false"
-	}
+	}, 
+	"serviceProperties": ["_id", "type","name","version","impersonate","__v"],
+	"typeServProperties": ["name","version","support"]
+	
 }
