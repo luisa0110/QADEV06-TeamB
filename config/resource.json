@@ -6,5 +6,8 @@
 		"from": "resourceFrom",
 		"description": "resourceDescription"
 	},
-	"resourceNameSize": 12
+	"resourceNameSize": 12,
+	"resourceProperties":[
+		"_id", "name", "customName", "fontIcon", "from", "description", "__v"
+	]
 }
