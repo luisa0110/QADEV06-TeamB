@@ -1,26 +1,27 @@
-//BDT - Meetings
-//Author Ariel Wagner Rojas
-// the next line call the file init.js to declare a global var(GLOBAL.initialDirectory)
+
 var init = require('../../init');
-//with config it can use the methods located into the config file
 var config = require(GLOBAL.initialDirectory+'/config/config.json');
 var expect = require('chai').expect;
-//with tokenAPI it can use the parameters located into the loginAPI file
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var endPoint = require(GLOBAL.initialDirectory+config.path.endPoints);
-var meetingConfig = require(GLOBAL.initialDirectory+config.path.meetingConfig);
-var locationConfig = require(GLOBAL.initialDirectory+config.path.locationConfig);
-var util = require(GLOBAL.initialDirectory+config.path.util);
-var mongodb= require(GLOBAL.initialDirectory+config.path.mongodb);
 var ObjectId = require('mongodb').ObjectId;
+
+var RequireServices = require(GLOBAL.initialDirectory + '/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
+
+var tokenAPI = requireServices.tokenAPI();
+var roomManagerAPI = requireServices.roomManagerAPI();
+var endPoint = requireServices.endPoint();
+var locationConfig = requireServices.locationConfig();
+var util = requireServices.util();
+var mongodb = requireServices.mongodb();
+
 //EndPoints
+var meetingConfig = require(GLOBAL.initialDirectory+config.path.meetingConfig);
 var url = config.url;
 var endPointById = url + endPoint.locationById;
 var meetingsEndPoint = url + endPoint.meetings;
 var servicesEndPoint = url + endPoint.services;
 var roomsEndPoint = url + endPoint.rooms;
-var resourceEndPoint = url+endPoint.resources;
+var resourceEndPoint = url + endPoint.resources;
 var endPointlocation = url + endPoint.locations;
 //global variables
 var rooms = endPoint.rooms;
@@ -28,20 +29,14 @@ var meetings = endPoint.meetings;
 var basic = config.userBasicAccountJson;
 var size = locationConfig.size;
 var locationJsonId = locationConfig.locationIdForMongo;
-var token = null;
-var serviceId = null;
-var roomId = null;
-var meetingId1 = null;
-var meetingId2 = null;
-var meetingId3 = null;
-var displayName = null;
-var location = null; 
-var locationId = null;
-var endPointLocationById = null;
-var locationJson  = null;
+
+var token, serviceId, roomId, meetingId1, meetingId2, 
+    meetingId3, displayName, location, locationId, 
+    endPointLocationById, locationJson;
 
 describe('meetings', function () {
 	this.timeout(config.timeOut);
+
 	before('Geeting the token', function (done) {
 		process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 		tokenAPI
@@ -52,7 +47,7 @@ describe('meetings', function () {
 					.findDocument('rooms', json, function(res2){
 						roomId = res2._id;
 						serviceId = res2.serviceId;
-						displayName=res2.displayName;
+						displayName = res2.displayName;
 						done();
 					});
 			});
@@ -115,6 +110,7 @@ describe('meetings', function () {
 				});
 				
 				it('Then ensure that is possible assign more of one meeting to room at different time', function (done) {
+
 					var num = displayName.substring(10);
 					var meetingJSon = util.generatemeetingJson(num);
 					meetingJSon.start = meetingConfig.startMeeting2;
