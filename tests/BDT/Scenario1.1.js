@@ -1,23 +1,18 @@
- /*
-Scenario 1.1 – Disable a room with a meeting associated
 
-	Given I have a Room from Exchange server
-		And a location associated 
-		And one meeting reserved with an specific date
-	When I dissable the Room
-		Then ensure that the meeting is there without changes
-*/
 var init = require('../../init.js');
-var config = require(GLOBAL.initialDirectory+'/config/config.json');
 var expect = require('chai').expect;
 
-var roomManagerAPI = require(GLOBAL.initialDirectory+config.path.roomManagerAPI);
-var tokenAPI = require(GLOBAL.initialDirectory+config.path.tokenAPI);
-var mongodb = require(GLOBAL.initialDirectory+config.path.mongodb);
+var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
+var requireServices = new RequireServices();
+
+var config = requireServices.config();
+var roomManagerAPI = requireServices.roomManagerAPI();
+var tokenAPI = requireServices.tokenAPI();
+var mongodb = requireServices.mongodb();
 var serviceConfig = require(GLOBAL.initialDirectory+config.path.serviceConfig);
-var locationConfig = require(GLOBAL.initialDirectory+config.path.locationConfig);
-var resourceConfig = require(GLOBAL.initialDirectory+config.path.resourceConfig);
-var util = require(GLOBAL.initialDirectory+config.path.util);
+var locationConfig = requireServices.locationConfig();
+var resourceConfig = requireServices.resourceConfig();
+var util = requireServices.util();
 
 var roomJson = serviceConfig.roomDisplayJson;
 //var locationJson = locationConfig.locationJson;
@@ -25,7 +20,7 @@ var roomtolocationJson = serviceConfig.locationId;
 var resourceJson = resourceConfig.resourceJson;
 var RoomDisablejson = serviceConfig.RoomDisablejson;
 
-var endPoints = require(GLOBAL.initialDirectory+config.path.endPoints);
+var endPoints = requireServices.endPoint()
 var url = config.url;
 var locationEndPoint = url+endPoints.locations;
 var serviceEndPoint = url+endPoints.services;
@@ -39,6 +34,16 @@ var token, Service, roomId, room, location,resource,
     meeting, displayName, meetingEndPoint,urlRoom;
 //status for response 200
 var ok = config.httpStatus.Ok;
+
+/*
+Scenario 1.1 – Disable a room with a meeting associated
+
+	Given I have a Room from Exchange server
+		And a location associated 
+		And one meeting reserved with an specific date
+	When I dissable the Room
+		Then ensure that the meeting is there without changes
+*/
 
 describe('Scenario 1.1 – Disable a room with a meeting associated', function () {
 	context('Given I have a Room e.g(Floor1Room99) from Exchange server',function(){
