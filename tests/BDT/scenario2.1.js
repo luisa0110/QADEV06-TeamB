@@ -29,26 +29,21 @@ var meetings  = endPoints.meetings;
 var basic 	  = config.userBasicAccountJson;
 var timeout	  = config.timeOut;
 // declare variables
-var size 			= locationConfig.size;
-var idRoom 			= null;
-var idService 		= null;
-var idLocation 		= null;
-var idLocation2 	= null;
-var idMeeting 		= null;
-var token 			= null;
-var roomName 		= null;
-
+var size = locationConfig.size, idRoom, idService, idLocation, 	
+    idLocation2, idMeeting, token, roomName;
+    
 /*
  Locations
- Scenario 2.1: Change the location of a meeting
- Given I have a Room specified
- And a location assigned at to Room
- And a resource assigned at to Room
- And one meeting assigned at the Room
- When create a second location
- And change the location of the room into other location
- Then ensure that is possible change the location of a meeting to other location
- */
+	 Scenario 2.1: Change the location of a meeting
+	 Given I have a Room specified
+	 	And a location assigned at to Room
+	 	And a resource assigned at to Room
+	 	And one meeting assigned at the Room
+	 When create a second location
+	 	And change the location of the room into other location
+	 Then ensure that is possible change the location of a meeting to other location
+*/
+
 describe('Scenario 2.1 – We have a meeting in a room with a determinate location that is change', function () {
 	this.timeout(timeout);
 	process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";

@@ -7,14 +7,14 @@ var requireServices = new RequireServices();
 
 var config         = requireServices.config();
 var tokenAPI       = requireServices.tokenAPI();
-var roomManagerAPI = requireServices.roomManagerAPI()
+var roomManagerAPI = requireServices.roomManagerAPI();
 var util           = requireServices.util();
 var getEndPoint    = requireServices.endPoint();
 var mongodb        = requireServices.mongodb();
 var roomJson       = requireServices.room();
 var resourceConfig = requireServices.resourceConfig();
-var meetingsConfig = require(GLOBAL.initialDirectory+config.path.meetingConfig);
-var outOfOrderConfig = require(GLOBAL.initialDirectory+config.path.outOfOrder);
+var meetingsConfig = requireServices.meetingConfig(); 
+var outOfOrderConfig = requireServices.outOfOrder();
 
 /* out of order*/     	
 var outOfOrderbyIDEndPoint     = config.url + getEndPoint.getOutOfOrder;
@@ -152,18 +152,9 @@ describe('Scenario 3.3 – Create a meeting in a room associated to location lat
 				roomManagerAPI
 				    .post(token, endPointOutOfOrder, associateOutOfOrder,function(err,res){
 						result = res;
-						console.log('--------------------------------------');
-						console.log(endPointOutOfOrder);
-						console.log(associateOutOfOrder);
-						console.log('[][][][][][][][][][][][***');
-						console.log(result);
-						console.log('[][][][][][][][][][][][**');
-						console.log('----------------------------------------');
 							mongodb
 							   .findDocument('outoforders',res.roomId,function(res){	
-							   	console.log('_____________________________');
-							   	 console.log(res);
-									//expect(result.status).to.equal(config.httpStatus.Ok);
+							   		expect(result.status).to.equal(config.httpStatus.Ok);
 									expect(result.body).to.not.be.null;
 									done();	
 
