@@ -1,12 +1,11 @@
-// Scenario1.1.js by Joaquin Gonzales
  /*
 Scenario 1.1 – Disable a room with a meeting associated
 
-Given I have a Room from Exchange server
-	And a location associated 
-	And one meeting reserved with an specific date
-When I dissable the Room
-	Then ensure that the meeting is there without changes
+	Given I have a Room from Exchange server
+		And a location associated 
+		And one meeting reserved with an specific date
+	When I dissable the Room
+		Then ensure that the meeting is there without changes
 */
 var init = require('../../init.js');
 var config = require(GLOBAL.initialDirectory+'/config/config.json');
@@ -36,16 +35,8 @@ var rooms = endPoints.rooms;
 var basic = config.userBasicAccountJson;
 
 var size = locationConfig.size;
-var token = null; 
-var Service = null;
-var roomId = null;
-var room = null;
-var location = null;
-var resource = null;
-var meeting = null;
-var displayName = null;
-var meetingEndPoint = null;
-var urlRoom = null;
+var token, Service, roomId, room, location,resource, 
+    meeting, displayName, meetingEndPoint,urlRoom;
 //status for response 200
 var ok = config.httpStatus.Ok;
 

@@ -36,20 +36,9 @@ var meetings 		 = getEndPoint.meetings;
 //timeout
 var timeout = config.timeOut;
 //global variables
-var endPointOutOfOrder	 = null;
-var resourceId 			 = null;
-var room 				 = null;
-var roomId 				 = null;
-var serviceId 			 = null;
-var token				 = null;
-var locationID 			 = null;
-var endPointLocationById = null;
-var locationJson  		 = null;
-var outOforderId 		 = null;
-var meeting 			 = null;
-var meetingId 			 = null;
-var roomEmail 		     = null;
-var locationName 		 = null;
+var endPointOutOfOrder, resourceId, room, roomId, serviceId,
+ 	token, locationID, endPointLocationById, locationJson,
+ 	outOforderId, meeting, meetingId, roomEmail, locationName; 		 
 
 describe('Scenario 3.1 – Create a meeting a room out of order associated to location', function () {
 	this.timeout(timeout);

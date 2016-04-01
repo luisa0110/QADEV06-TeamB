@@ -22,7 +22,6 @@ var resourceConfig = require(GLOBAL.initialDirectory+config.path.resourceConfig)
 var util = require(GLOBAL.initialDirectory+config.path.util);
 
 var roomJson = serviceConfig.roomDisplayJson;
-//var locationJson = locationConfig.locationJson;
 var roomtolocationJson = serviceConfig.locationId;
 var resourceJson = resourceConfig.resourceJson;
 var RoomDisablejson = serviceConfig.RoomDisablejson;
@@ -36,17 +35,9 @@ var meetings = endPoints.meetings;
 var rooms = endPoints.rooms;
 var basic = config.userBasicAccountJson;
 
-var size = locationConfig.size;
-var token = null; 
-var Service = null;
-var roomId = null;
-var room = null;
-var location = null;
-var resource = null;
-var meeting = null;
-var displayName = null;
-var meetingEndPoint = null;
-var urlRoom = null;
+var size = locationConfig.size
+var token, Service, roomId,room ,location ,resource,
+    meeting ,displayName ,meetingEndPoint ,urlRoom; 
 //status for response 200
 var ok = config.httpStatus.Ok;
 

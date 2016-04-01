@@ -1,5 +1,4 @@
-//scenario3.2.js
-//Ivan Morales Camacho
+
 var init 	= require('../../init');
 var expect 	= require('chai').expect;
 
@@ -36,20 +35,10 @@ var meetings 		 = getEndPoint.meetings;
 //timeout
 var timeout			 = config.timeOut;
 //global variables
-var endPointOutOfOrder	 = null;
-var resourceId 			 = null;
-var room 				 = null;
-var roomId 				 = null;
-var serviceId 			 = null;
-var token				 = null;
-var locationID 			 = null;
-var endPointLocationById = null;
-var locationJson  		 = null;
-var outOforderId 		 = null;
-var meeting 			 = null;
-var meetingId 			 = null;
-var roomEmail 			 = null;
-var locationName 		 = null;
+var endPointOutOfOrder, resourceId, room, roomId, serviceId, token, 
+    locationID, endPointLocationById, locationJson, outOforderId, meeting, 			 
+    meetingId, roomEmail, locationName; 
+    		
 
 describe('Scenario 3.2 – Create a meeting in a room associated to location in different date of the out of order ', function () {
 	this.timeout(timeout);

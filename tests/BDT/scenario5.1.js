@@ -37,6 +37,7 @@ describe('meetings', function () {
 	this.timeout(config.timeOut);
 	before('Geeting the token', function (done) {
 		process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 		tokenAPI
 			.getToken(function(err,res){
 				token = res.body.token;
@@ -64,7 +65,7 @@ describe('meetings', function () {
 						meetingConfig.locationId.locationId = locationId;
 						var json = meetingConfig.locationId;
 						roomManagerAPI.
-							put(token,roomsEndPoint + '/' + roomId, json, function(err,res){
+							put(token, roomsEndPoint + '/' + roomId, json, function(err,res){
 								done();
 							});
 					});
@@ -74,29 +75,34 @@ describe('meetings', function () {
 				console.log('\t\tAnd one meeting assigned at the Room');
 				var num = displayName.substring(10);
 				var meetingJSon = util.generatemeetingJson(num);
-				var _endPoint;
+				
 					meetingJSon.start = meetingConfig.startMeeting.substring(0,19);
 					meetingJSon.end = meetingConfig.endMeeting.substring(0,19);
                    
-                    _endPoint = servicesEndPoint + '/' + 
+                var _endPoint = servicesEndPoint + '/' + 
                                 serviceId + rooms + '/' + 
                                 roomId + meetings;
+                                console.log(_endPoint);
 
 						roomManagerAPI
 							.postwithBasic(basic,_endPoint, meetingJSon, function(err, res){
-
-								meetingId1 = res.body._id;
 								
+                                meetingId1 = res.body._id;
+
 								done();
 							});
 			});
 
 			after('Deleting The location, resources and meeting', function (done) {
+               var _endPoint = servicesEndPoint + '/' + serviceId + rooms 
+                                + '/' + roomId + meetings + '/' + meetingId1;
 
+               console.log(_endPoint + '  ...end pointttt');
 				roomManagerAPI
 					.del(token,endPointLocationById, function (err,res) {
+                        
 						roomManagerAPI
-							.delwithBasic(basic, servicesEndPoint + '/' + serviceId + '/' + rooms + '/' + roomId + '/' + meetings + '/' + meetingId1, function(err, res){
+							.delwithBasic(basic, _endPoint, function(err, res){
 								meetingId1 = null;
 								done();
 							});
@@ -108,10 +114,14 @@ describe('meetings', function () {
 				it('Then ensure that is not possible assign the new meeting to room at the same time', function (done) {
 					var num = displayName.substring(10);
 					var meetingJSon = util.generatemeetingJson(num);
+					var _endPoint = servicesEndPoint + '/' + serviceId + '/' 
+					                + rooms + '/' + roomId + '/' + meetings;
+
 					meetingJSon.start = meetingConfig.startMeeting;
 					meetingJSon.end = meetingConfig.endMeeting;
+                      
 					roomManagerAPI
-						.postwithBasic(basic, servicesEndPoint + '/' + serviceId + '/' + rooms + '/' + roomId + '/' + meetings, meetingJSon, function(err, res){
+						.postwithBasic(basic, _endPoint, meetingJSon, function(err, res){
 							response = res;
 							meetingId2 = response.body._id;
 							expect(response.status).to.equal(403);

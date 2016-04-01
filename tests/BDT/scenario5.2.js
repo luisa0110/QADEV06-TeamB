@@ -15,7 +15,7 @@ var util = requireServices.util();
 var mongodb = requireServices.mongodb();
 
 //EndPoints
-var meetingConfig = require(GLOBAL.initialDirectory+config.path.meetingConfig);
+var meetingConfig = requireServices.meetingConfig();
 var url = config.url;
 var endPointById = url + endPoint.locationById;
 var meetingsEndPoint = url + endPoint.meetings;
