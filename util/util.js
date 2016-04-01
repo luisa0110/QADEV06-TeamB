@@ -163,6 +163,10 @@ var getDate = function(num){
             month = date.getMonth()+2;
             day = '0' + (1 + num);
          }
+         else
+         {
+            day = '0' + day;
+         }
     if(month < 10)
     {
         month = '0' + month;
@@ -172,12 +176,12 @@ var getDate = function(num){
 };
 
 exports.getDate = getDate;
+
 /**
  * This method generated a meeting with location, roomEmail, start date and end date specified
  * @param  {num} the parameter indicate the posicion of room where the meeting is created
  * @return {json} returns the json of the meeting configured
  */
-
 var generatemeetingJson = function (num) {
 
     meetingsConfig.meetingJSon.location = meetingsConfig.meetingJSon.location.replace('[num]', num);

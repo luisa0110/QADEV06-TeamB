@@ -86,8 +86,10 @@ describe('Smoke testings for meetings : POST Method', function () {
 	it('POST /services/{:serviceId}/rooms/{:roomId}/meetings returns 200', function (done){	
 		var num = displayName.substring(10);
 		var meetingJSon = util.generatemeetingJson(num);
+		var _endPoint = servicesEndPoint + '/' + serviceId + rooms  + '/' +roomId  + meetings;
 		roomManagerAPI
-			.postwithBasic(basic, servicesEndPoint + '/' + serviceId + rooms  + '/' +roomId  + meetings, meetingJSon,function(err, res){
+			.postwithBasic(basic, _endPoint, meetingJSon,function(err, res){
+			
 				meetingId = res.body._id;
 				expect(res.status).to.equal(config.httpStatus.Ok);
 				done();
