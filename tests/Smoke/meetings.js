@@ -1,12 +1,12 @@
 //Smoke testing - GET Meetings
 //Author Ariel Wagner Rojas
 // the next line call the file init.js to declare a global var(GLOBAL.initialDirectory)
+//libs
 var init = require('../../init');
-//with config it can use the methods located into the config file
 var expect = require('chai').expect;
 var RequireServices = require(GLOBAL.initialDirectory+'/lib/req-serv.js').RequireServices;
 var requireServices = new RequireServices();
-//with tokenAPI it can use the parameters located into the loginAPI file
+//services
 var config = requireServices.config();
 var tokenAPI = requireServices.tokenAPI();
 var roomManagerAPI = requireServices.roomManagerAPI();
@@ -14,6 +14,7 @@ var endPoint = requireServices.endPoint();
 var meetingConfig = require(GLOBAL.initialDirectory+config.path.meetingConfig);
 var util = requireServices.util();
 var mongodb= requireServices.mongodb();
+var basic = config.userBasicAccountJson;
 //EndPoints
 var url = config.url;
 var meetingsEndPoint = url + endPoint.meetings;
@@ -21,8 +22,7 @@ var servicesEndPoint = url + endPoint.services;
 var roomsEndPoint = url + endPoint.rooms;
 var rooms = endPoint.rooms;
 var meetings = endPoint.meetings;
-var basic = config.userBasicAccountJson;
-//global variables
+//variables
 //the token variable will contain the token
 var token = null;
 //the serviceId variable will contain the service id
@@ -33,7 +33,7 @@ var roomId = null;
 var meetingId = null;
 //the Room displayName
 var displayName = null;
-
+/*TESTS*/
 describe('Smoke testings for meetings: GET Method', function () {
 	
 	this.timeout(config.timeOut);
@@ -49,7 +49,10 @@ describe('Smoke testings for meetings: GET Method', function () {
 				done();
 			});
 	});
-
+/*
+* Smoke Test meetings with the method get for getting a
+* all meeting by room.
+*/
 	it('GET /services/{:serviceId}/rooms/{:roomId}/meetings returns 200', function (done){	
 		roomManagerAPI
 			.get(servicesEndPoint + '/' + serviceId + '/' + rooms + '/' + roomId + '/' + meetings, function(err, res){
@@ -82,12 +85,17 @@ describe('Smoke testings for meetings : POST Method', function () {
 				done();
 			});
 	});
-
+/*
+* Smoke Test meetings with the method post for creates a
+* specific room by meeting.
+*/
 	it('POST /services/{:serviceId}/rooms/{:roomId}/meetings returns 200', function (done){	
 		var num = displayName.substring(10);
 		var meetingJSon = util.generatemeetingJson(num);
+		var _endPoint = servicesEndPoint + '/' + serviceId + rooms  + '/' +roomId  + meetings;
 		roomManagerAPI
-			.postwithBasic(basic, servicesEndPoint + '/' + serviceId + rooms  + '/' +roomId  + meetings, meetingJSon,function(err, res){
+			.postwithBasic(basic, _endPoint, meetingJSon,function(err, res){
+			
 				meetingId = res.body._id;
 				expect(res.status).to.equal(config.httpStatus.Ok);
 				done();
@@ -116,7 +124,10 @@ describe('Smoke testings for meetings : GET, PUT and DELETE methods by meeting I
 					});
 			});
 	});
-
+/*
+* Smoke Test meetings with the method get for getting a
+* specific room by meeting.
+*/
 	it('GET /services/{:serviceId}/rooms/{:roomId}/meetings/{:meetingId} returns 200', function (done){	
 		roomManagerAPI
 			.get(servicesEndPoint + '/' + serviceId + '/' + rooms + '/' + roomId + '/' + meetings + '/' + meetingId, function(err, res){
@@ -124,7 +135,10 @@ describe('Smoke testings for meetings : GET, PUT and DELETE methods by meeting I
 				done();
 			});
 	});
-
+/*
+* Smoke Test meetings with the method put for updates a
+* specific room by meeting.
+*/
 	it('PUT /services/{:serviceId}/rooms/{:roomId}/meetings/{:meetingId} returns 200', function (done){	
 		var num = displayName.substring(10);
 		var meetingPutJSon = util.generatemeetingJson(num);
@@ -136,7 +150,10 @@ describe('Smoke testings for meetings : GET, PUT and DELETE methods by meeting I
 				done();
 			});
 	});	
-
+/*
+* Smoke Test meetings with the method delete for deletes a
+* specific room by meeting.
+*/
 	it('DELETE /services/{:serviceId}/rooms/{:roomId}/meetings/{:meetingId} returns 200', function (done) {
 		roomManagerAPI
 			.delwithBasic(basic, servicesEndPoint + '/' + serviceId + '/' + rooms + '/' + roomId + '/' + meetings + '/' + meetingId, function(err, res){
