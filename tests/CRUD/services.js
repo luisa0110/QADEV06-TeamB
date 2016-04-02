@@ -202,7 +202,7 @@ describe('CRUD Tesinting for Services Room Manager',function()
 			});	
 		});
 		/*This test case is to review*/
-		it.skip('PUT /service/serviceID/roomId/rooms, CRUD testing verify the room is modified with metho put',function(done)
+		it('PUT /service/serviceID/roomId/rooms, CRUD testing verify the room is modified with metho put',function(done)
 		{
 			mongodb
 				.findDocument('rooms',roomDisplayJson,function(res)
